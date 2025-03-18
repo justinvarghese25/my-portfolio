@@ -74,7 +74,7 @@
     }
     header .btn:hover { background: #9a6cd3; }
 
-    /* About Section with New Profile Layout (Rectangle Shape) */
+    /* About Section */
     #about {
       padding: 60px 20px;
       max-width: 1100px;
@@ -94,7 +94,6 @@
       transform: scale(1.05);
       opacity: 1;
     }
-    /* New layout for profile image and description */
     .profile-container {
       display: flex;
       align-items: center;
@@ -123,10 +122,7 @@
       max-width: 600px;
       text-align: left;
     }
-    /* Button Group in About Section */
-    .btn-group {
-      margin-top: 20px;
-    }
+    .btn-group { margin-top: 20px; }
     .download-btn,
     .contact-btn {
       display: inline-block;
@@ -147,15 +143,6 @@
       color: #121212;
     }
     .contact-btn:hover { transform: scale(1.05); }
-    @media (max-width: 600px) {
-      .profile-container {
-        flex-direction: column;
-        text-align: center;
-      }
-      .profile-description {
-        text-align: center;
-      }
-    }
 
     /* Showcase Section with Tabs */
     #showcase {
@@ -219,7 +206,7 @@
     .card h3 { margin-bottom: 10px; color: #e0e0e0; }
     .card p { font-size: 0.9em; color: #ccc; }
 
-    /* Modal for Detailed Project/Certificate View */
+    /* Modal */
     .modal {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -262,7 +249,6 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
       text-align: center;
     }
-    /* Contact form styling */
     #contact .contact-form {
       max-width: 600px;
       margin: 0 auto;
@@ -302,7 +288,7 @@
       display: none;
       font-weight: bold;
     }
-    /* Contact icons: LinkedIn & Email (for copy) */
+    /* Contact Icons */
     #contact .contact-icons {
       text-align: center;
       margin-bottom: 20px;
@@ -322,6 +308,27 @@
       background: #1e1e1e;
       color: #ccc;
     }
+
+    /* Media Queries for Tablet and Mobile */
+    @media (max-width: 768px) {
+      nav { padding: 10px 15px; }
+      nav .logo { font-size: 1.3em; }
+      nav .nav-links a { margin: 0 10px; font-size: 0.9em; }
+      header h1 { font-size: 2.5em; }
+      header p { font-size: 1em; }
+      .section-title { font-size: 1.8em; }
+      .btn-group a { padding: 8px 15px; font-size: 0.9em; }
+    }
+    @media (max-width: 480px) {
+      nav { padding: 8px 10px; }
+      nav .logo { font-size: 1.2em; }
+      nav .nav-links a { margin: 0 5px; font-size: 0.8em; }
+      header h1 { font-size: 2em; }
+      header p { font-size: 0.9em; }
+      .section-title { font-size: 1.6em; }
+      .btn-group a { padding: 6px 12px; font-size: 0.8em; }
+      .contact-icons a { font-size: 1.5em; margin: 0 5px; }
+    }
   </style>
 </head>
 <body>
@@ -335,7 +342,7 @@
     </div>
   </nav>
 
-  <!-- Header with Full-Screen Particle Background and Parallax Effect -->
+  <!-- Header with Full-Screen Particle Background -->
   <header id="home">
     <div id="particles-js"></div>
     <div class="intro" data-aos="fade-up">
@@ -346,7 +353,7 @@
     </div>
   </header>
 
-  <!-- About Section with New Profile Layout (Rectangle) and Buttons -->
+  <!-- About Section -->
   <section id="about">
     <h2 class="section-title" data-aos="fade-up">About Me</h2>
     <div class="profile-container" data-aos="fade-up" data-aos-delay="200">
@@ -354,7 +361,7 @@
         <img src="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/pic.jpg" class="profile-img" alt="Profile Image">
       </div>
       <div class="profile-description">
-        <p>I am Justin Varghese John, a Master's student specializing in Robotics and Autonomous Systems (AI) at Arizona State University. I integrate AI-driven solutions with robotics to develop intelligent autonomous systems. My expertise spans computer vision, deep learning, embedded systems, and edge AI deployment.</p>
+        <p>Hello, I'm Justin Varghese John—a robotics engineer specializing in Robot AI with a keen interest in perception and human-robot interaction. I develop intelligent systems that empower robots to understand and interact with their environments in real time. With deep expertise in deep learning, computer vision, and autonomous navigation, I design innovative, scalable solutions that push the limits of technology. I strive to be at the forefront of robotics advancements, leaving a transformative mark on the field.</p>
         <div class="btn-group">
           <a href="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/JUSTIN_JOHN_RESUME.pdf" class="download-btn" target="_blank" download>Download CV</a>
           <a href="#contact" class="contact-btn">Contact Me</a>
@@ -432,35 +439,90 @@
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project1')">&times;</span>
       <h2>Autonomous Surveillance Vehicle</h2>
-      <p>Developed an AI-powered robotic system using Nvidia Jetson Nano and Python, integrating deep learning for collision avoidance, path following, and real-time environmental monitoring. This project demonstrated the potential for intelligent mobility in dynamic environments.</p>
+      <p>Abstract:</p>
+      <p>Designed and developed an AI-powered surveillance vehicle capable of collision avoidance, path following, and real-time environmental monitoring using NVIDIA Jetson Nano. The system integrates deep learning and image processing to autonomously navigate diverse environments and ensure efficient surveillance operations in smart cities, warehouses, and security applications.</p>
+
+      <p>Detailed Summary:</p>
+      <p>The Autonomous Surveillance Vehicle is a self-navigating robotic system built to monitor surroundings, detect obstacles, and autonomously follow roads using computer vision and AI-based decision-making. The project was developed by leading a team of four engineers and deployed on NVIDIA Jetson Nano with ROS for real-time communication and control.
+        Collision Avoidance & Path Following: Integrated a dual-camera vision system with real-time object detection using Deep Learning (TensorFlow & OpenCV) to classify scenarios as "free" or "blocked" and maneuver accordingly.
+        Real-Time Surveillance & Monitoring: Enabled image classification and environmental monitoring, allowing the vehicle to detect anomalies and potential security threats in real time.
+        Embedded AI Deployment: Optimized Jetson Nano-based deep learning models to run efficiently, ensuring minimal latency for real-time processing and decision-making.
+        Applications: Can be deployed for urban surveillance, warehouse monitoring, and industrial automation, enhancing security and safety with autonomous mobility.</p>
     </div>
   </div>
   <div id="modal-project2" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project2')">&times;</span>
       <h2>Multi-Robot Exploration</h2>
-      <p>Designed and implemented a multi-agent navigation framework using a modified Lévy walk with potential field-based collision avoidance, ensuring efficient exploration and robust map merging, validated via MATLAB simulations.</p>
+      <p>Abstract:</p>
+      <p>Developed a multi-robot exploration framework using modified Lévy walk strategy and potential field-based collision avoidance to improve autonomous area coverage and mapping efficiency. Simulated in MATLAB, the system enables multiple robots to explore unknown environments while maintaining high map coverage and avoiding segregation.</p>
+
+      <p>Detailed Summary:</p>
+      <p>The project aimed at improving autonomous exploration by designing an intelligent multi-robot system capable of efficient navigation, collaborative mapping, and real-time obstacle avoidance.
+
+        Intelligent Exploration Algorithm: Implemented a modified Lévy walk strategy, ensuring random yet efficient area coverage while preventing robots from clustering in one region.
+        Collision Avoidance & Path Planning: Combined potential field-based collision avoidance with multi-agent coordination, allowing smooth and collision-free exploration.
+        Simulated Environment & Validation: The entire system was tested and validated using MATLAB, achieving over 90% map coverage efficiency, demonstrating effective multi-robot coordination.
+        Seamless Map Merging: Developed an autonomous mapping system where each robot’s local map was merged into a complete map, allowing for robust navigation and area recognition.
+        Applications: This project has implications in search and rescue operations, planetary exploration, and autonomous warehouse logistics.</p>
     </div>
   </div>
   <div id="modal-project3" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project3')">&times;</span>
       <h2>Real-Time Incident Detection</h2>
-      <p>Trained a deep learning model on over 300,000 images for incident detection, optimized for edge deployment on an Arduino Nano 33 BLE using TensorFlow Lite, achieving 95% accuracy while reducing model size by 75%.</p>
+      <p>Abstract:</p>
+      <p>Developed an AI-powered real-time incident detection system utilizing deep learning and edge AI to identify accidents, road hazards, and obstructions with 95% accuracy. The trained model was optimized and reduced in size using TensorFlow Lite, then deployed on NVIDIA Jetson Nano for high-performance real-time processing. Additionally, Edge Impulse was used to deploy a lightweight version of the model on Arduino Nano 33 BLE, ensuring efficient low-power edge AI execution for IoT-based emergency response systems.</p>
+
+      <p>Detailed Summary:</p>
+      <p>This project enhances road safety and intelligent traffic management by integrating deep learning-based incident detection with low-power edge AI for real-time decision-making in autonomous vehicles and smart transportation networks.
+
+        A convolutional neural network (CNN) was trained on 300,000+ road images using TensorFlow, achieving 95% precision in detecting accidents, traffic congestion, and hazardous conditions. The model was optimized with TensorFlow Lite, reducing its size by 75% while maintaining accuracy, making it suitable for embedded deployment.
+        
+        For dual-platform edge AI deployment, the optimized model was implemented on NVIDIA Jetson Nano for real-time processing of live camera feeds and high-speed inference. A lightweight version was deployed on Arduino Nano 33 BLE using Edge Impulse, enabling low-power, distributed IoT-based safety systems.
+        
+        A LoRaWAN-based real-time alert system transmits incident data to vehicles, traffic centers, and emergency responders, providing early warnings and alternative route suggestions to prevent congestion and secondary accidents.
+        
+        The system seamlessly integrates with intelligent transportation systems (ITS) and autonomous vehicles, enabling them to avoid road hazards autonomously. It is also compatible with existing urban traffic surveillance infrastructure, ensuring scalability and real-world adaptability.
+        
+        This AI-powered solution significantly improves road safety, autonomous navigation, and traffic management by combining high-performance deep learning with energy-efficient edge computing.</p>
     </div>
   </div>
   <div id="modal-project4" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project4')">&times;</span>
       <h2>Road Marking System</h2>
-      <p>Implemented a MATLAB-based lane detection system using semantic segmentation to identify and mark lane boundaries on unmarked rural roads, enhancing autonomous navigation and safety in challenging environments.</p>
+      <p>Abstract:</p>
+      <p>Designed and implemented a MATLAB-based road marking system that utilizes semantic segmentation and image processing to detect and mark lanes on unmarked rural roads. This system enhances autonomous vehicle navigation, providing a digital lane infrastructure that improves vehicle localization, lane-following capabilities, and driving reliability in unstructured environments.</p>
+
+      <p>Detailed Summary:</p>
+      <p>To extend autonomous vehicle usability beyond structured urban roads, this project employs advanced image processing and AI techniques to create digital lane markings for rural and unmarked roads.
+
+        Semantic Segmentation for Road Detection: A deep learning-based semantic segmentation model was trained to differentiate road surfaces from non-road areas, enabling precise identification of drivable regions.
+        Edge Detection & Lane Marking Generation:
+        Canny Edge Detection & Hough Transform were applied to extract lane boundaries.
+        A dynamic lane marking algorithm was implemented to define virtual lanes, ensuring better lane detection and improved safety in rural settings.
+        Lane Departure Warning System: Integrated a real-time lane departure alert mechanism, which detects when a vehicle veers out of the marked lane and issues corrective signals to assist autonomous or human drivers.
+        Digital Lane for Autonomous Navigation: Unlike traditional lane marking systems, this project creates a digital lane structure that autonomous vehicles can utilize for navigation, significantly improving their ability to drive on unstructured roads, highways, and developing infrastructures.
+        Scalability & Applications: The system can be used in self-driving cars, agricultural automation, and off-road autonomous vehicles, expanding the applications of autonomous driving in rural and industrial settings.
+        This project significantly enhances the reliability and usability of autonomous systems in rural and unstructured road conditions, ensuring wider deployment and safer navigation for AI-driven vehicles.</p>
     </div>
   </div>
   <div id="modal-project5" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project5')">&times;</span>
       <h2>Autonomous Maze-Solving Robot</h2>
-      <p>Developed an image processing-based maze-solving robot using the MyCobot Pro 600, integrating BFS-based pathfinding, kinematic modeling, and digital twin simulations in MATLAB-Simulink for precise and efficient navigation.</p>
+      <p>Abstract:</p>
+      <p>Developed an autonomous maze-solving robot using MyCobot Pro 600, integrating computer vision, path planning, and a digital twin simulation to enhance navigation accuracy. The robotic system used kinematic modeling, forward and inverse kinematics, and real-world validation to autonomously trace and solve mazes using its end effector.</p>
+
+      <p>Detailed Summary:</p>
+      <p>The project involved designing and implementing a maze-solving robotic arm, leveraging digital twin simulation and robotic kinematics for real-world accuracy.
+
+        Digital Twin Validation: Designed a MATLAB-Simulink digital twin of MyCobot Pro 600, allowing virtual testing of the maze-solving strategy before executing on the physical robot.
+        Image Processing for Maze Recognition: Developed an image-based path extraction technique, enabling the robot to identify the maze layout and determine the optimal path using BFS-based shortest pathfinding.
+        Forward & Inverse Kinematics Control: Implemented kinematic modeling, ensuring precise movement of the end effector to trace the correct maze solution path in both simulation and real-world execution.
+        Real-World Deployment: The validated digital twin model was deployed onto the actual MyCobot Pro 600, where the end effector autonomously followed the extracted path, solving the maze in real-time.
+        Applications: This project demonstrates AI-driven robotic path planning, precision motion control, and digital twin validation, applicable to automated manufacturing, robotic manipulation, and industrial automation.</p>
     </div>
   </div>
 
@@ -748,7 +810,7 @@
   </script>
   <!-- Custom Script for Email Copy and Formspree Submission -->
   <script>
-    // Function to copy email address using Clipboard API
+    // Function to copy email address using the Clipboard API
     function copyEmail() {
       const email = "justinvjohn25@gmail.com";
       navigator.clipboard.writeText(email).then(() => {
