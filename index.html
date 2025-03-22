@@ -41,9 +41,9 @@
 
     /* Optimized Header with Particle Background */
     header {
-      /* Subtract nav height (80px) from viewport height */
+      /* For desktops, subtract nav height from viewport height */
       height: calc(100vh - 80px);
-      padding-top: 80px; /* So header content doesn't get hidden behind nav */
+      padding-top: 80px; /* Ensures header content isn’t hidden by nav */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -52,6 +52,13 @@
       padding-left: 20px;
       padding-right: 20px;
       margin-bottom: 50px;
+    }
+    /* Mobile-specific fix: use full viewport height */
+    @media (max-width: 480px) {
+      header {
+        height: 100vh;
+        padding-top: 80px;
+      }
     }
     #particles-js {
       position: absolute;
