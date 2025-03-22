@@ -169,6 +169,7 @@
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.3s, transform 0.3s;
+      white-space: nowrap;
     }
     #showcase .tabs button:hover,
     #showcase .tabs button.active {
@@ -328,6 +329,15 @@
       .section-title { font-size: 1.6em; }
       .btn-group a { padding: 6px 12px; font-size: 0.8em; }
       .contact-icons a { font-size: 1.5em; margin: 0 5px; }
+      /* Optimize Showcase Tabs for Mobile */
+      #showcase .tabs {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      #showcase .tabs button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+      }
     }
   </style>
 </head>
@@ -441,7 +451,6 @@
       <h2>Autonomous Surveillance Vehicle</h2>
       <p>Abstract:</p>
       <p>Designed and developed an AI-powered surveillance vehicle capable of collision avoidance, path following, and real-time environmental monitoring using NVIDIA Jetson Nano. The system integrates deep learning and image processing to autonomously navigate diverse environments and ensure efficient surveillance operations in smart cities, warehouses, and security applications.</p>
-
       <p>Detailed Summary:</p>
       <p>The Autonomous Surveillance Vehicle is a self-navigating robotic system built to monitor surroundings, detect obstacles, and autonomously follow roads using computer vision and AI-based decision-making. The project was developed by leading a team of four engineers and deployed on NVIDIA Jetson Nano with ROS for real-time communication and control.
         Collision Avoidance & Path Following: Integrated a dual-camera vision system with real-time object detection using Deep Learning (TensorFlow & OpenCV) to classify scenarios as "free" or "blocked" and maneuver accordingly.
@@ -456,10 +465,8 @@
       <h2>Multi-Robot Exploration</h2>
       <p>Abstract:</p>
       <p>Developed a multi-robot exploration framework using modified Lévy walk strategy and potential field-based collision avoidance to improve autonomous area coverage and mapping efficiency. Simulated in MATLAB, the system enables multiple robots to explore unknown environments while maintaining high map coverage and avoiding segregation.</p>
-
       <p>Detailed Summary:</p>
       <p>The project aimed at improving autonomous exploration by designing an intelligent multi-robot system capable of efficient navigation, collaborative mapping, and real-time obstacle avoidance.
-
         Intelligent Exploration Algorithm: Implemented a modified Lévy walk strategy, ensuring random yet efficient area coverage while preventing robots from clustering in one region.
         Collision Avoidance & Path Planning: Combined potential field-based collision avoidance with multi-agent coordination, allowing smooth and collision-free exploration.
         Simulated Environment & Validation: The entire system was tested and validated using MATLAB, achieving over 90% map coverage efficiency, demonstrating effective multi-robot coordination.
@@ -473,18 +480,12 @@
       <h2>Real-Time Incident Detection</h2>
       <p>Abstract:</p>
       <p>Developed an AI-powered real-time incident detection system utilizing deep learning and edge AI to identify accidents, road hazards, and obstructions with 95% accuracy. The trained model was optimized and reduced in size using TensorFlow Lite, then deployed on NVIDIA Jetson Nano for high-performance real-time processing. Additionally, Edge Impulse was used to deploy a lightweight version of the model on Arduino Nano 33 BLE, ensuring efficient low-power edge AI execution for IoT-based emergency response systems.</p>
-
       <p>Detailed Summary:</p>
       <p>This project enhances road safety and intelligent traffic management by integrating deep learning-based incident detection with low-power edge AI for real-time decision-making in autonomous vehicles and smart transportation networks.
-
         A convolutional neural network (CNN) was trained on 300,000+ road images using TensorFlow, achieving 95% precision in detecting accidents, traffic congestion, and hazardous conditions. The model was optimized with TensorFlow Lite, reducing its size by 75% while maintaining accuracy, making it suitable for embedded deployment.
-        
         For dual-platform edge AI deployment, the optimized model was implemented on NVIDIA Jetson Nano for real-time processing of live camera feeds and high-speed inference. A lightweight version was deployed on Arduino Nano 33 BLE using Edge Impulse, enabling low-power, distributed IoT-based safety systems.
-        
         A LoRaWAN-based real-time alert system transmits incident data to vehicles, traffic centers, and emergency responders, providing early warnings and alternative route suggestions to prevent congestion and secondary accidents.
-        
         The system seamlessly integrates with intelligent transportation systems (ITS) and autonomous vehicles, enabling them to avoid road hazards autonomously. It is also compatible with existing urban traffic surveillance infrastructure, ensuring scalability and real-world adaptability.
-        
         This AI-powered solution significantly improves road safety, autonomous navigation, and traffic management by combining high-performance deep learning with energy-efficient edge computing.</p>
     </div>
   </div>
@@ -494,10 +495,8 @@
       <h2>Road Marking System</h2>
       <p>Abstract:</p>
       <p>Designed and implemented a MATLAB-based road marking system that utilizes semantic segmentation and image processing to detect and mark lanes on unmarked rural roads. This system enhances autonomous vehicle navigation, providing a digital lane infrastructure that improves vehicle localization, lane-following capabilities, and driving reliability in unstructured environments.</p>
-
       <p>Detailed Summary:</p>
       <p>To extend autonomous vehicle usability beyond structured urban roads, this project employs advanced image processing and AI techniques to create digital lane markings for rural and unmarked roads.
-
         Semantic Segmentation for Road Detection: A deep learning-based semantic segmentation model was trained to differentiate road surfaces from non-road areas, enabling precise identification of drivable regions.
         Edge Detection & Lane Marking Generation:
         Canny Edge Detection & Hough Transform were applied to extract lane boundaries.
@@ -514,10 +513,8 @@
       <h2>Autonomous Maze-Solving Robot</h2>
       <p>Abstract:</p>
       <p>Developed an autonomous maze-solving robot using MyCobot Pro 600, integrating computer vision, path planning, and a digital twin simulation to enhance navigation accuracy. The robotic system used kinematic modeling, forward and inverse kinematics, and real-world validation to autonomously trace and solve mazes using its end effector.</p>
-
       <p>Detailed Summary:</p>
       <p>The project involved designing and implementing a maze-solving robotic arm, leveraging digital twin simulation and robotic kinematics for real-world accuracy.
-
         Digital Twin Validation: Designed a MATLAB-Simulink digital twin of MyCobot Pro 600, allowing virtual testing of the maze-solving strategy before executing on the physical robot.
         Image Processing for Maze Recognition: Developed an image-based path extraction technique, enabling the robot to identify the maze layout and determine the optimal path using BFS-based shortest pathfinding.
         Forward & Inverse Kinematics Control: Implemented kinematic modeling, ensuring precise movement of the end effector to trace the correct maze solution path in both simulation and real-world execution.
