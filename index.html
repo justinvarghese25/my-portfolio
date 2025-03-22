@@ -39,16 +39,19 @@
     nav .logo { font-size: 1.5em; font-weight: 600; }
     nav .nav-links a { margin: 0 15px; font-weight: 500; transition: color 0.3s; }
 
-    /* Header with Particle Background */
+    /* Optimized Header with Particle Background */
     header {
-      height: 100vh;
+      /* Subtract nav height (80px) from viewport height */
+      height: calc(100vh - 80px);
+      padding-top: 80px; /* So header content doesn't get hidden behind nav */
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       overflow: hidden;
-      padding: 0 20px;
-      margin-bottom: 50px; /* extra spacing for smooth transition */
+      padding-left: 20px;
+      padding-right: 20px;
+      margin-bottom: 50px;
     }
     #particles-js {
       position: absolute;
