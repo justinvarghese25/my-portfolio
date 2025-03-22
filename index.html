@@ -38,32 +38,39 @@
     nav .logo { font-size: 1.5em; font-weight: 600; }
     nav .nav-links a { margin: 0 15px; font-weight: 500; transition: color 0.3s; }
 
-    /* Header with Full-Screen Particle Background */
+    /* Optimized Header with Full-Screen Particle Background */
     header {
       height: 100vh;
       position: relative;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       text-align: center;
+      overflow: hidden;
+      padding: 0 20px;
     }
     #particles-js {
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: -1;
     }
     .intro {
       position: relative;
       z-index: 1;
-      opacity: 0;
+      padding: 20px;
       animation: fadeIn 2s forwards;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
+    header h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
     }
-    header h1 { font-size: 3em; margin-bottom: 10px; }
-    header p { font-size: 1.2em; margin-bottom: 20px; }
+    header p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
     header .btn {
       background: #bb86fc;
       color: #121212;
@@ -73,6 +80,20 @@
       transition: background 0.3s;
     }
     header .btn:hover { background: #9a6cd3; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Responsive adjustments for Header */
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.5em; }
+      header p { font-size: 1em; }
+    }
+    @media (max-width: 480px) {
+      header h1 { font-size: 2em; }
+      header p { font-size: 0.9em; }
+    }
 
     /* About Section */
     #about {
@@ -90,10 +111,7 @@
       color: #bb86fc;
       transition: transform 0.5s ease, opacity 0.5s ease;
     }
-    .section-title:hover {
-      transform: scale(1.05);
-      opacity: 1;
-    }
+    .section-title:hover { transform: scale(1.05); opacity: 1; }
     .profile-container {
       display: flex;
       align-items: center;
@@ -200,10 +218,7 @@
       cursor: pointer;
       text-align: center;
     }
-    .card:hover { 
-      transform: scale(1.03); 
-      background: #333;
-    }
+    .card:hover { transform: scale(1.03); background: #333; }
     .card i { font-size: 2em; margin-bottom: 10px; color: #bb86fc; }
     .card h3 { margin-bottom: 10px; color: #e0e0e0; }
     .card p { font-size: 0.9em; color: #ccc; }
@@ -259,16 +274,9 @@
       margin: 0 auto;
       text-align: left;
     }
-    #contact .contact-form p {
-      margin-bottom: 20px;
-    }
-    #contact .form-group {
-      margin-bottom: 15px;
-    }
-    #contact .form-group label {
-      display: block;
-      margin-bottom: 5px;
-    }
+    #contact .contact-form p { margin-bottom: 20px; }
+    #contact .form-group { margin-bottom: 15px; }
+    #contact .form-group label { display: block; margin-bottom: 5px; }
     #contact .form-group input,
     #contact .form-group textarea {
       width: 100%;
@@ -323,7 +331,6 @@
       header p { font-size: 1em; }
       .section-title { font-size: 1.8em; }
       .btn-group a { padding: 8px 15px; font-size: 0.9em; }
-      /* Allow tab buttons to wrap if needed */
       #showcase .tabs { flex-wrap: wrap; gap: 10px; }
       #showcase .tabs button { padding: 8px 15px; font-size: 0.9em; }
     }
@@ -336,7 +343,6 @@
       .section-title { font-size: 1.6em; }
       .btn-group a { padding: 6px 12px; font-size: 0.8em; }
       .contact-icons a { font-size: 1.5em; margin: 0 5px; }
-      /* Optimize modal content padding on very small screens */
       .modal-content { padding: 20px; }
     }
   </style>
@@ -352,7 +358,7 @@
     </div>
   </nav>
 
-  <!-- Header with Full-Screen Particle Background -->
+  <!-- Optimized Header -->
   <header id="home">
     <div id="particles-js"></div>
     <div class="intro" data-aos="fade-up">
@@ -807,7 +813,6 @@
   </script>
   <!-- Custom Script for Email Copy and Formspree Submission -->
   <script>
-    // Function to copy email address using the Clipboard API
     function copyEmail() {
       const email = "justinvjohn25@gmail.com";
       navigator.clipboard.writeText(email).then(() => {
@@ -817,7 +822,6 @@
       });
     }
 
-    // AJAX form submission via Formspree
     document.getElementById("contactForm").addEventListener("submit", function(event) {
       event.preventDefault();
       var form = this;
