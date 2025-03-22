@@ -19,6 +19,7 @@
       color: #e0e0e0;
       overflow-x: hidden;
       scroll-behavior: smooth;
+      scroll-padding-top: 80px; /* ensures anchor links account for fixed nav */
     }
     a { color: #bb86fc; text-decoration: none; }
     a:hover { color: #fff; }
@@ -48,6 +49,7 @@
       text-align: center;
       overflow: hidden;
       padding: 0 20px;
+      margin-bottom: 50px; /* extra spacing so transition to next section feels natural */
     }
     #particles-js {
       position: absolute;
@@ -80,7 +82,6 @@
       transition: background 0.3s;
     }
     header .btn:hover { background: #9a6cd3; }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -99,7 +100,7 @@
     #about {
       padding: 60px 20px;
       max-width: 1100px;
-      margin: 120px auto 40px auto;
+      margin: 0 auto 40px auto;
       background: #1e1e1e;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
@@ -821,7 +822,6 @@
         alert("Failed to copy email: " + err);
       });
     }
-
     document.getElementById("contactForm").addEventListener("submit", function(event) {
       event.preventDefault();
       var form = this;
@@ -840,7 +840,6 @@
         displayResponse("There was an error sending your message. Please try again later.", "error");
       });
     });
-
     function displayResponse(message, type) {
       var responseDiv = document.getElementById("responseMessage");
       responseDiv.style.display = "block";
