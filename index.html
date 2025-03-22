@@ -159,6 +159,7 @@
       justify-content: center;
       gap: 20px;
       margin-bottom: 20px;
+      flex-wrap: nowrap;
     }
     #showcase .tabs button {
       background: #2c2c2c;
@@ -207,7 +208,7 @@
     .card h3 { margin-bottom: 10px; color: #e0e0e0; }
     .card p { font-size: 0.9em; color: #ccc; }
 
-    /* Modal */
+    /* Modal (Pop-Up) */
     .modal {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -216,6 +217,7 @@
       justify-content: center;
       align-items: center;
       z-index: 2000;
+      padding: 20px;
     }
     .modal.active { display: flex; }
     .modal-content {
@@ -226,6 +228,8 @@
       width: 90%;
       position: relative;
       animation: popIn 0.5s ease;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     @keyframes popIn {
       from { transform: scale(0.9); opacity: 0; }
@@ -319,6 +323,9 @@
       header p { font-size: 1em; }
       .section-title { font-size: 1.8em; }
       .btn-group a { padding: 8px 15px; font-size: 0.9em; }
+      /* Allow tab buttons to wrap if needed */
+      #showcase .tabs { flex-wrap: wrap; gap: 10px; }
+      #showcase .tabs button { padding: 8px 15px; font-size: 0.9em; }
     }
     @media (max-width: 480px) {
       nav { padding: 8px 10px; }
@@ -329,15 +336,8 @@
       .section-title { font-size: 1.6em; }
       .btn-group a { padding: 6px 12px; font-size: 0.8em; }
       .contact-icons a { font-size: 1.5em; margin: 0 5px; }
-      /* Optimize Showcase Tabs for Mobile */
-      #showcase .tabs {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      #showcase .tabs button {
-        padding: 8px 15px;
-        font-size: 0.9em;
-      }
+      /* Optimize modal content padding on very small screens */
+      .modal-content { padding: 20px; }
     }
   </style>
 </head>
