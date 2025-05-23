@@ -378,6 +378,10 @@
     <!-- Projects Tab -->
     <div id="projects" class="tab-content active">
       <div class="content-grid">
+        <div class="card" onclick="openModal('modal-project6')">
+          <h3>ReflexDodgeBot: Real-Time Evasion Using Monocular Vision on Embedded Hardware</h3>
+          <p>AI system for obstacle detection and reflex-like evasion using monocular vision.</p>
+        </div>
         <div class="card" onclick="openModal('modal-project1')">
           <h3>Autonomous Surveillance Vehicle</h3>
           <p>AI system for collision avoidance, path following, and real-time monitoring.</p>
@@ -506,6 +510,28 @@
         Forward & Inverse Kinematics Control: Implemented kinematic modeling, ensuring precise movement of the end effector to trace the correct maze solution path in both simulation and real-world execution.
         Real-World Deployment: The validated digital twin model was deployed onto the actual MyCobot Pro 600, where the end effector autonomously followed the extracted path, solving the maze in real-time.
         Applications: This project demonstrates AI-driven robotic path planning, precision motion control, and digital twin validation, applicable to automated manufacturing, robotic manipulation, and industrial automation.</p>
+    </div>
+  </div>
+  <div id="modal-project6" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project1')">&times;</span>
+      <h2>ReflexDodgeBot: Real-Time Evasion Using Monocular Vision on Embedded Hardware</h2>
+      <p>Abstract:</p>
+      <p>This project demonstrates the development of a real-time object detection and evasion system for autonomous robots using only monocular vision on low-cost embedded hardware. By integrating YOLOv8n for object detection and Guided Decoding for monocular depth estimation, the system enables the robot to autonomously avoid obstacles in real-time, simulating human-like reflexes. The system is deployed on an NVIDIA Jetson Nano for high-speed, low-latency decision-making, without relying on expensive depth sensors.</p>
+      <p>Detailed Summary:</p>
+      <p>The ReflexDodgeBot is an autonomous mobile robot capable of performing real-time obstacle avoidance using a monocular camera and embedded hardware. The project was developed to address the need for efficient, cost-effective obstacle detection and evasion on embedded platforms.
+
+Object Detection: The system uses YOLOv8n for real-time object detection, trained on a custom dataset of 1,000 annotated images. Despite its high precision, the model faced class-dependence and latency challenges in real-world applications.
+
+Monocular Depth Estimation: The system incorporates Guided Decoding for depth estimation, utilizing only RGB input for accurate depth prediction. This allows the bot to detect fast-approaching objects and perform evasive maneuvers.
+
+Evasion Strategy: A Kalman filter-based analysis tracks the movement of objects and triggers evasive actions (e.g., dodging left, right, forward, or backward) based on their position and approach velocity. The bot uses Mecanum wheels for omnidirectional movement.
+
+Hardware Platform: Powered by the NVIDIA Jetson Nano, the ReflexDodgeBot features an I2C-based PCA9685 motor controller and an L298N motor driver to execute the evasive actions. Optimized deep learning models (TensorRT and FP16) ensure real-time operation with a frame rate of 20-25 FPS.
+
+Applications: This low-cost, real-time evasion system is suitable for various autonomous applications such as mobile robotics, edge robotics, and autonomous vehicles, where rapid obstacle avoidance is crucial.
+
+This project proves that low-cost embedded systems can achieve high-performance obstacle detection and evasion without relying on expensive depth sensors, offering a practical solution for real-time robotic navigation in unpredictable environments.</p>
     </div>
   </div>
 
