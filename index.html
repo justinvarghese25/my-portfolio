@@ -159,7 +159,7 @@
     #showcase .tabs {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 12px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
@@ -167,7 +167,7 @@
       background: #2c2c2c;
       color: #e0e0e0;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 16px;
       font-size: 1em;
       border-radius: 4px;
       cursor: pointer;
@@ -333,7 +333,6 @@
     <div class="logo"><strong>Justin Varghese John</strong></div>
     <div class="nav-links">
       <a href="#about">About</a>
-      <a href="#experience">Experience</a>
       <a href="#showcase">Showcase</a>
       <a href="#contact">Contact</a>
     </div>
@@ -367,42 +366,44 @@
     </div>
   </section>
 
-  <!-- Experience Section (new) -->
-  <section id="experience" data-aos="fade-up">
-    <h2 class="section-title">Experience</h2>
-    <div class="content-grid">
-      <div class="card" onclick="openModal('modal-exp1')">
-        <i class="fas fa-briefcase"></i>
-        <h3>Graduate Researcher — AAIR Lab</h3>
-        <p>Arizona State University — Jul 2025 – Present</p>
-        <p>Master’s thesis research in robot planning, integrating symbolic representations with PDDL-based planners and building simulation-first pipelines for deployment on real robots. :contentReference[oaicite:1]{index=1}</p>
-      </div>
-
-      <div class="card" onclick="openModal('modal-exp2')">
-        <i class="fas fa-briefcase"></i>
-        <h3>Robotics Engineering Intern — Cartken (EPICS)</h3>
-        <p>Tempe, AZ — May 2025 – Aug 2025</p>
-        <p>Collaborated with Cartken to analyze lifecycle & environmental impact of autonomous delivery robots, supported prototyping, electrical troubleshooting, and embedded programming. :contentReference[oaicite:2]{index=2}</p>
-      </div>
-
-      <div class="card" onclick="openModal('modal-exp3')">
-        <i class="fas fa-briefcase"></i>
-        <h3>Process Automation & Robotics Intern — ABB</h3>
-        <p>Bangalore, India — Oct 2022</p>
-        <p>Worked on industrial automation workflows, gained hands-on experience with PLC and SCADA systems in robotics and automation. :contentReference[oaicite:3]{index=3}</p>
-      </div>
-    </div>
-  </section>
-
   <!-- Showcase Section -->
   <section id="showcase" data-aos="fade-up">
     <h2 class="section-title">Showcase</h2>
     <div class="tabs">
+      <button class="tab-btn" data-tab="experience">Experience</button>
       <button class="tab-btn active" data-tab="projects">Projects</button>
       <button class="tab-btn" data-tab="certifications">Certifications</button>
       <button class="tab-btn" data-tab="tech">Tech Stack</button>
       <button class="tab-btn" data-tab="education">Education</button>
     </div>
+
+    <!-- Experience Tab -->
+    <div id="experience" class="tab-content">
+      <p style="color:#ccc; font-size:0.95em; margin-bottom:12px;">Experience details sourced from resume. :contentReference[oaicite:1]{index=1}</p>
+      <div class="content-grid">
+        <div class="card" onclick="openModal('modal-exp1')">
+          <i class="fas fa-briefcase"></i>
+          <h3>Graduate Researcher — AAIR Lab</h3>
+          <p>Arizona State University — Jul 2025 – Present</p>
+          <p>Master's thesis research in robot planning, integrating symbolic reasoning with PDDL planners and building simulation-first pipelines for deployment on robots. :contentReference[oaicite:2]{index=2}</p>
+        </div>
+
+        <div class="card" onclick="openModal('modal-exp2')">
+          <i class="fas fa-briefcase"></i>
+          <h3>Robotics Engineering Intern — Cartken (EPICS)</h3>
+          <p>Tempe, AZ — May 2025 – Aug 2025</p>
+          <p>Analyzed lifecycle & environmental impact of autonomous delivery robots; supported prototyping, electrical troubleshooting, and embedded programming. :contentReference[oaicite:3]{index=3}</p>
+        </div>
+
+        <div class="card" onclick="openModal('modal-exp3')">
+          <i class="fas fa-briefcase"></i>
+          <h3>Process Automation & Robotics Intern — ABB</h3>
+          <p>Bangalore, India — Oct 2022</p>
+          <p>Worked on industrial automation workflows and gained hands-on experience with PLC and SCADA systems. :contentReference[oaicite:4]{index=4}</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Projects Tab -->
     <div id="projects" class="tab-content active">
       <div class="content-grid">
@@ -432,37 +433,37 @@
         </div>
       </div>
     </div>
+
     <!-- Certifications Tab -->
     <div id="certifications" class="tab-content">
       <div class="content-grid" id="certificate-container"></div>
     </div>
+
     <!-- Tech Stack Tab -->
     <div id="tech" class="tab-content">
       <div id="tech-container"></div>
     </div>
+
     <!-- Education Tab -->
     <div id="education" class="tab-content">
       <div class="content-grid">
         <div class="card">
           <i class="fas fa-graduation-cap"></i>
-          <h3>Master's Degree</h3>
-          <p>Pursuing MS in Robotics and Autonomous Systems (AI)</p>
-          <p>Arizona State University (Aug 2024 - May 2026)</p>
-          <p>GPA: 3.94/4.00</p>
+          <h3>Master of Science in Robotics & Autonomous Systems (AI)</h3>
+          <p>Arizona State University — Aug 2024 – Expected May 2026</p>
+          <p>GPA: 4.00/4.00</p>
         </div>
         <div class="card">
           <i class="fas fa-graduation-cap"></i>
-          <h3>Bachelor's Degree</h3>
-          <p>B.Tech (Honors) in Robotics and Automation</p>
-          <p>Minor - Computer Science and Engineering (AI)</p>
-          <p>APJ Abdul Kalam Technological University (Aug 2019 - Aug 2023)</p>
-          <p>CGPA: 3.72/4.00</p>
+          <h3>Bachelor of Technology (Honors) — Robotics & Automation</h3>
+          <p>APJ Abdul Kalam Technological University — Aug 2019 – Aug 2023</p>
+          <p>Minor: Computer Science & Engineering (AI) • CGPA: 3.721/4.00</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Modals for Project Details (unchanged) -->
+  <!-- Modals for Project Details -->
   <div id="modal-project1" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project1')">&times;</span>
@@ -563,13 +564,13 @@ This project proves that low-cost embedded systems can achieve high-performance 
     </div>
   </div>
 
-  <!-- Modals for Experience details (new) -->
+  <!-- Modals for Experience details -->
   <div id="modal-exp1" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-exp1')">&times;</span>
       <h2>Graduate Researcher — Autonomous Agents and Intelligent Robots (AAIR) Lab</h2>
       <p><strong>Arizona State University — Jul 2025 – Present</strong></p>
-      <p>Conducting master’s thesis research in robot planning under Prof. Siddharth Srivastava, focusing on decision-making and planning frameworks for autonomous robotic systems. Developing and testing planning algorithms integrating perception and control, and building simulation-first pipelines for real-world autonomous platforms. :contentReference[oaicite:4]{index=4}</p>
+      <p>Conducting master’s thesis research in robot planning under Prof. Siddharth Srivastava, focusing on decision-making and planning frameworks for autonomous robotic systems. Responsibilities include developing planning algorithms that integrate perception and control, building simulation-first pipelines, and testing research ideas on physical robots. :contentReference[oaicite:5]{index=5}</p>
     </div>
   </div>
 
@@ -578,7 +579,7 @@ This project proves that low-cost embedded systems can achieve high-performance 
       <span class="modal-close" onclick="closeModal('modal-exp2')">&times;</span>
       <h2>Robotics Engineering Intern — Cartken (EPICS)</h2>
       <p><strong>Cartken — May 2025 – Aug 2025</strong></p>
-      <p>Collaborated with Cartken through ASU’s EPICS program to analyze lifecycle and environmental impact of autonomous delivery robots, focusing on sustainable reuse and recycling of components. Supported robot prototyping, electrical troubleshooting, and embedded programming. :contentReference[oaicite:5]{index=5}</p>
+      <p>Collaborated with Cartken through ASU’s EPICS program to analyze lifecycle and environmental impact of autonomous delivery robots, focusing on sustainable reuse and recycling of components. Supported robot prototyping, electrical troubleshooting, and embedded programming. :contentReference[oaicite:6]{index=6}</p>
     </div>
   </div>
 
@@ -587,7 +588,7 @@ This project proves that low-cost embedded systems can achieve high-performance 
       <span class="modal-close" onclick="closeModal('modal-exp3')">&times;</span>
       <h2>Process Automation & Robotics Intern — ABB India Ltd</h2>
       <p><strong>Bangalore, India — Oct 2022</strong></p>
-      <p>Worked alongside engineers on industrial automation workflows, acquiring proficiency in PLC and SCADA systems, and gaining hands-on experience in robotics and automation. :contentReference[oaicite:6]{index=6}</p>
+      <p>Worked alongside engineers on industrial automation workflows, acquiring proficiency in PLC and SCADA systems, and gaining hands-on experience in robotics and automation. :contentReference[oaicite:7]{index=7}</p>
     </div>
   </div>
 
@@ -671,6 +672,7 @@ This project proves that low-cost embedded systems can achieve high-performance 
   </script>
   <!-- Tab and Modal Functionality -->
   <script>
+    // Tabs (includes Experience tab)
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     tabButtons.forEach(btn => {
@@ -681,9 +683,14 @@ This project proves that low-cost embedded systems can achieve high-performance 
         document.getElementById(btn.dataset.tab).classList.add('active');
       });
     });
+    // Set default active tab (Projects)
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.dataset.tab === 'projects') { b.classList.add('active'); document.getElementById('projects').classList.add('active'); }
+    });
+
+    // Modal handling
     function openModal(modalId) {
       document.getElementById(modalId).classList.add('active');
-      // prevent background scrolling when modal open
       document.body.style.overflow = 'hidden';
     }
     function closeModal(modalId) {
