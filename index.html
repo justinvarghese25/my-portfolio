@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Justin Varghese John | Portfolio</title>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -39,10 +39,10 @@
     nav .logo { font-size: 1.5em; font-weight: 600; }
     nav .nav-links a { margin: 0 15px; font-weight: 500; transition: color 0.3s; }
 
-    /* Consistent Header with Particle Background */
+    /* Header */
     header {
       height: 100vh;
-      padding-top: 80px; /* So header content isn’t hidden by the fixed nav */
+      padding-top: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,277 +53,90 @@
       margin-bottom: 50px;
     }
     #particles-js {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
     }
     .intro {
-      position: relative;
-      z-index: 1;
-      padding: 20px;
-      animation: fadeIn 2s forwards;
+      position: relative; z-index: 1; padding: 20px; animation: fadeIn 2s forwards;
     }
     header h1 { font-size: 3em; margin-bottom: 10px; }
     header p { font-size: 1.2em; margin-bottom: 20px; }
-    header .btn {
-      background: #bb86fc;
-      color: #121212;
-      padding: 10px 20px;
-      border-radius: 4px;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
+    header .btn { background: #bb86fc; color: #121212; padding: 10px 20px; border-radius: 4px; font-weight: 600; transition: background 0.3s; }
     header .btn:hover { background: #9a6cd3; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* About Section */
-    #about {
+    /* Sections */
+    .section {
       padding: 60px 20px;
       max-width: 1100px;
-      margin: 0 auto 40px auto;
+      margin: 40px auto;
       background: #1e1e1e;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.3);
       text-align: center;
     }
+
+    #about { margin-top: 0; } /* header already pushes spacing */
+
     .section-title {
       font-size: 2em;
-      margin-bottom: 40px;
+      margin-bottom: 24px;
       color: #bb86fc;
       transition: transform 0.5s ease, opacity 0.5s ease;
     }
     .section-title:hover { transform: scale(1.05); opacity: 1; }
-    .profile-container {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      padding: 20px;
-      justify-content: center;
-    }
-    .profile-img-wrapper {
-      flex-shrink: 0;
-      border: 4px solid #bb86fc;
-      padding: 5px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    }
-    .profile-img {
-      width: 200px;
-      height: 200px;
-      object-fit: cover;
-    }
-    .profile-description {
-      flex: 1;
-      font-size: 1.1em;
-      line-height: 1.6;
-      max-width: 600px;
-      text-align: left;
-    }
-    .btn-group { margin-top: 20px; }
-    .download-btn,
-    .contact-btn {
-      display: inline-block;
-      padding: 10px 20px;
-      font-weight: 600;
-      border-radius: 4px;
-      transition: transform 0.3s, background 0.3s;
-      margin: 5px;
-    }
-    .download-btn {
-      background: linear-gradient(45deg, #bb86fc, #ff4081);
-      color: #121212;
-    }
-    .download-btn:hover { transform: scale(1.05); }
-    .contact-btn {
-      background: #bb86fc;
-      color: #121212;
-    }
-    .contact-btn:hover { transform: scale(1.05); }
 
-    /* Showcase Section with Tabs */
-    #showcase {
-      padding: 60px 20px;
-      max-width: 1100px;
-      margin: 40px auto;
-      background: #1e1e1e;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-    #showcase .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    #showcase .tabs button {
-      background: #2c2c2c;
-      color: #e0e0e0;
-      border: none;
-      padding: 10px 16px;
-      font-size: 1em;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-      white-space: nowrap;
-    }
-    #showcase .tabs button:hover,
-    #showcase .tabs button.active {
-      background: #bb86fc;
-      color: #121212;
-      transform: scale(1.05);
-    }
-    .tab-content {
-      display: none;
-      animation: slideInRight 0.5s forwards;
-    }
-    .tab-content.active { display: block; }
-    @keyframes slideInRight {
-      from { transform: translateX(100px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: #2c2c2c;
-      padding: 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-    .card:hover { transform: scale(1.03); background: #333; }
-    .card i { font-size: 2em; margin-bottom: 10px; color: #bb86fc; }
-    .card h3 { margin-bottom: 10px; color: #e0e0e0; }
-    .card p { font-size: 0.9em; color: #ccc; }
+    .profile-container { display:flex; align-items:center; gap:20px; flex-wrap:wrap; padding:20px; justify-content:center; }
+    .profile-img-wrapper { flex-shrink:0; border:4px solid #bb86fc; padding:5px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+    .profile-img { width:200px; height:200px; object-fit:cover; border-radius:4px; }
+    .profile-description { flex:1; font-size:1.05em; line-height:1.6; max-width:600px; text-align:left; color:#e6e6e6; }
+    .btn-group { margin-top: 18px; }
+    .download-btn, .contact-btn { display:inline-block; padding:10px 20px; font-weight:600; border-radius:4px; transition:transform 0.3s, background 0.3s; margin:5px; }
+    .download-btn { background: linear-gradient(45deg, #bb86fc, #ff4081); color:#121212; }
+    .contact-btn { background:#bb86fc; color:#121212; }
+    .download-btn:hover, .contact-btn:hover { transform: scale(1.03); }
 
-    /* Modal (Pop-Up) */
-    .modal {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      display: none;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      padding: 20px;
+    /* Showcase Tabs */
+    #showcase { text-align:center; }
+    .tabs { display:flex; justify-content:center; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+    .tabs button {
+      background:#2c2c2c; color:#e0e0e0; border:none; padding:10px 16px; font-size:1em; border-radius:4px; cursor:pointer;
+      transition: background 0.3s, transform 0.3s; white-space:nowrap;
     }
-    .modal.active { display: flex; }
-    .modal-content {
-      background: #1e1e1e;
-      padding: 30px;
-      border-radius: 8px;
-      max-width: 800px;
-      width: 90%;
-      position: relative;
-      animation: popIn 0.5s ease;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    @keyframes popIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 1.5em;
-      cursor: pointer;
-      color: #bb86fc;
-    }
+    .tabs button.active, .tabs button:hover { background:#bb86fc; color:#121212; transform:scale(1.05); }
 
-    /* Contact Section */
-    #contact {
-      padding: 60px 20px;
-      max-width: 1100px;
-      margin: 40px auto;
-      background: #1e1e1e;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-    #contact .contact-form {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: left;
-    }
-    #contact .contact-form p { margin-bottom: 20px; }
-    #contact .form-group { margin-bottom: 15px; }
-    #contact .form-group label { display: block; margin-bottom: 5px; }
-    #contact .form-group input,
-    #contact .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: #2c2c2c;
-      color: #e0e0e0;
-    }
-    #contact .button {
-      padding: 10px 20px;
-      background: #bb86fc;
-      border: none;
-      border-radius: 4px;
-      color: #121212;
-      cursor: pointer;
-      transition: transform 0.3s, background 0.3s;
-    }
-    #contact .button:hover { transform: scale(1.05); }
-    #responseMessage {
-      margin-top: 20px;
-      display: none;
-      font-weight: bold;
-    }
-    #contact .contact-icons {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    #contact .contact-icons a {
-      font-size: 2em;
-      margin: 0 10px;
-      color: #bb86fc;
-      transition: transform 0.3s ease;
-    }
-    #contact .contact-icons a:hover { transform: scale(1.1); }
+    .tab-content { display:none; animation: slideInRight 0.45s forwards; }
+    .tab-content.active { display:block; }
+    @keyframes slideInRight { from { transform: translateX(100px); opacity:0; } to { transform: translateX(0); opacity:1; } }
 
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #1e1e1e;
-      color: #ccc;
-    }
+    .content-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
 
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      nav { padding: 10px 15px; }
-      nav .logo { font-size: 1.3em; }
-      nav .nav-links a { margin: 0 10px; font-size: 0.9em; }
-      header h1 { font-size: 2.5em; }
-      header p { font-size: 1em; }
-      .section-title { font-size: 1.8em; }
-      .btn-group a { padding: 8px 15px; font-size: 0.9em; }
+    .card { background:#2c2c2c; padding:20px; border-radius:8px; cursor:pointer; text-align:center; transition:transform 0.25s ease, background 0.25s ease; }
+    .card:hover { transform: scale(1.03); background:#333; }
+    .card i { font-size:2em; margin-bottom:10px; color:#bb86fc; }
+    .card h3 { margin-bottom:10px; color:#e0e0e0; }
+    .card p { font-size:0.95em; color:#cfcfcf; }
+
+    /* Modal */
+    .modal { position:fixed; top:0; left:0; width:100%; height:100%; display:none; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:2000; padding:20px; }
+    .modal.active { display:flex; }
+    .modal-content { background:#1e1e1e; padding:24px; border-radius:8px; max-width:800px; width:90%; position:relative; max-height:90vh; overflow-y:auto; }
+    .modal-close { position:absolute; top:10px; right:10px; font-size:1.5em; cursor:pointer; color:#bb86fc; }
+
+    /* Contact */
+    #contact .contact-form { max-width:600px; margin:0 auto; text-align:left; }
+    #contact .form-group { margin-bottom:15px; }
+    #contact input, #contact textarea { width:100%; padding:10px; border-radius:4px; border:1px solid #444; background:#2c2c2c; color:#e0e0e0; }
+
+    footer { text-align:center; padding:20px; background:#1e1e1e; color:#ccc; margin-top:20px; }
+
+    /* Responsive */
+    @media (max-width:768px) {
+      header h1 { font-size:2.4em; } header p { font-size:1em; }
+      .section-title { font-size:1.8em; }
     }
-    @media (max-width: 480px) {
-      nav .logo { font-size: 1.2em; }
-      nav .nav-links a { margin: 0 5px; font-size: 0.8em; }
-      header h1 { font-size: 2em; }
-      header p { font-size: 0.9em; }
-      .section-title { font-size: 1.6em; }
-      .btn-group a { padding: 6px 12px; font-size: 0.8em; }
-      .contact-icons a { font-size: 1.5em; margin: 0 5px; }
-      .modal-content { padding: 20px; }
+    @media (max-width:480px) {
+      .profile-img { width:140px; height:140px; }
+      .profile-description { font-size:0.95em; }
     }
   </style>
 </head>
@@ -343,21 +156,24 @@
     <div id="particles-js"></div>
     <div class="intro" data-aos="fade-up">
       <h1>Justin Varghese John</h1>
-      <p>Master’s in Robotics and Autonomous Systems (AI) | ASU</p>
-      <p>Robotics Researcher | AI Developer | Innovator</p>
+      <p>Master’s in Robotics and Autonomous Systems (AI) | Arizona State University</p>
+      <p>Robotics Researcher · AI Developer · Autonomous Systems</p>
       <a href="#about" class="btn">Learn More</a>
     </div>
   </header>
 
   <!-- About Section -->
-  <section id="about" data-aos="fade-up">
+  <section id="about" class="section" data-aos="fade-up">
     <h2 class="section-title">About Me</h2>
     <div class="profile-container" data-aos="fade-up" data-aos-delay="200">
       <div class="profile-img-wrapper">
         <img src="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/pic.jpg" class="profile-img" alt="Profile Image">
       </div>
+
       <div class="profile-description">
-        <p>Hello, I'm Justin Varghese John—a robotics engineer specializing in Robot AI with a keen interest in perception and human-robot interaction. I develop intelligent systems that empower robots to understand and interact with their environments in real time. With deep expertise in deep learning, computer vision, and autonomous navigation, I design innovative, scalable solutions that push the limits of technology. I strive to be at the forefront of robotics advancements, leaving a transformative mark on the field.</p>
+        <!-- tightened formatting and line-length for clarity, kept original tone -->
+        <p>I am a robotics and AI engineer pursuing an MS in Robotics and Autonomous Systems (AI) at Arizona State University. My work focuses on robot planning, autonomous navigation, embedded AI, and perception — taking systems from simulation and digital twins into real-world deployment. I have experience in multi-robot coordination, edge AI on NVIDIA Jetson, industrial automation (PLC/SCADA), and building reproducible experimental pipelines. I’m actively seeking robotics or AI roles where I can design and ship real-time, scalable autonomous systems.</p>
+
         <div class="btn-group">
           <a href="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/JUSTIN_JOHN_RESUME.pdf" class="download-btn" target="_blank" download>Download CV</a>
           <a href="#contact" class="contact-btn">Contact Me</a>
@@ -366,19 +182,20 @@
     </div>
   </section>
 
-  <!-- Showcase Section -->
-  <section id="showcase" data-aos="fade-up">
+  <!-- Showcase (tabs) -->
+  <section id="showcase" class="section" data-aos="fade-up">
     <h2 class="section-title">Showcase</h2>
+
     <div class="tabs">
-      <button class="tab-btn" data-tab="experience">Experience</button>
-      <button class="tab-btn active" data-tab="projects">Projects</button>
+      <button class="tab-btn active" data-tab="experience">Experience</button>
+      <button class="tab-btn" data-tab="projects">Projects</button>
       <button class="tab-btn" data-tab="certifications">Certifications</button>
       <button class="tab-btn" data-tab="tech">Tech Stack</button>
       <button class="tab-btn" data-tab="education">Education</button>
     </div>
 
-    <!-- Experience Tab -->
-    <div id="experience" class="tab-content">
+    <!-- Experience Tab (default active) -->
+    <div id="experience" class="tab-content active">
       <p style="color:#ccc; font-size:0.95em; margin-bottom:12px;">Experience details sourced from resume. :contentReference[oaicite:1]{index=1}</p>
       <div class="content-grid">
         <div class="card" onclick="openModal('modal-exp1')">
@@ -405,7 +222,7 @@
     </div>
 
     <!-- Projects Tab -->
-    <div id="projects" class="tab-content active">
+    <div id="projects" class="tab-content">
       <div class="content-grid">
         <div class="card" onclick="openModal('modal-project6')">
           <h3>ReflexDodgeBot: Real-Time Evasion Using Monocular Vision on Embedded Hardware</h3>
@@ -461,9 +278,10 @@
         </div>
       </div>
     </div>
+
   </section>
 
-  <!-- Modals for Project Details -->
+  <!-- Project Modals (same content as before) -->
   <div id="modal-project1" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project1')">&times;</span>
@@ -478,6 +296,7 @@
         Applications: Can be deployed for urban surveillance, warehouse monitoring, and industrial automation, enhancing security and safety with autonomous mobility.</p>
     </div>
   </div>
+
   <div id="modal-project2" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project2')">&times;</span>
@@ -493,6 +312,7 @@
         Applications: This project has implications in search and rescue operations, planetary exploration, and autonomous warehouse logistics.</p>
     </div>
   </div>
+
   <div id="modal-project3" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project3')">&times;</span>
@@ -508,6 +328,7 @@
         This AI-powered solution significantly improves road safety, autonomous navigation, and traffic management by combining high-performance deep learning with energy-efficient edge computing.</p>
     </div>
   </div>
+
   <div id="modal-project4" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project4')">&times;</span>
@@ -526,6 +347,7 @@
         This project significantly enhances the reliability and usability of autonomous systems in rural and unstructured road conditions, ensuring wider deployment and safer navigation for AI-driven vehicles.</p>
     </div>
   </div>
+
   <div id="modal-project5" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project5')">&times;</span>
@@ -541,6 +363,7 @@
         Applications: This project demonstrates AI-driven robotic path planning, precision motion control, and digital twin validation, applicable to automated manufacturing, robotic manipulation, and industrial automation.</p>
     </div>
   </div>
+
   <div id="modal-project6" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project6')">&times;</span>
@@ -564,7 +387,7 @@ This project proves that low-cost embedded systems can achieve high-performance 
     </div>
   </div>
 
-  <!-- Modals for Experience details -->
+  <!-- Experience Modals -->
   <div id="modal-exp1" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-exp1')">&times;</span>
@@ -592,20 +415,16 @@ This project proves that low-cost embedded systems can achieve high-performance 
     </div>
   </div>
 
-  <!-- Contact Section -->
-  <section id="contact" data-aos="fade-up">
+  <!-- Contact -->
+  <section id="contact" class="section" data-aos="fade-up">
     <h2 class="section-title">Contact Me</h2>
-    <div class="contact-icons">
-      <a href="https://www.linkedin.com/in/justin-varghese-john" target="_blank" title="LinkedIn">
-        <i class="fab fa-linkedin"></i>
-      </a>
-      <a href="javascript:void(0)" onclick="copyEmail()" title="Copy Email">
-        <i class="fas fa-envelope"></i>
-      </a>
+    <div class="contact-icons" style="margin-bottom:14px;">
+      <a href="https://www.linkedin.com/in/justin-varghese-john" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="javascript:void(0)" onclick="copyEmail()" title="Copy Email"><i class="fas fa-envelope"></i></a>
     </div>
+
     <div class="contact-form">
-      <p>If you'd like to reach out, please fill out the form below:</p>
-      <!-- Contact Form using Formspree -->
+      <p style="color:#cfcfcf;">If you'd like to reach out, please fill out the form below:</p>
       <form id="contactForm" action="https://formspree.io/f/xqapawaq" method="POST">
         <div class="form-group">
           <label for="name">Name:</label>
@@ -619,35 +438,31 @@ This project proves that low-cost embedded systems can achieve high-performance 
           <label for="message">Message:</label>
           <textarea id="message" name="message" rows="5" required></textarea>
         </div>
-        <button type="submit" class="button">Send Message</button>
+        <button type="submit" class="download-btn" style="background:#bb86fc; color:#121212; border:none;">Send Message</button>
       </form>
       <div id="responseMessage"></div>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <p>&copy; 2025 Justin Varghese John. All rights reserved.</p>
   </footer>
 
   <!-- Scripts -->
-  <!-- AOS Library JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  <script>
-    AOS.init({ duration: 1000, once: true });
-  </script>
-  <!-- Particles.js for Background Animation -->
+  <script> AOS.init({ duration: 1000, once: true }); </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
       "particles": {
         "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
         "color": { "value": "#bb86fc" },
-        "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000" } },
-        "opacity": { "value": 0.5, "random": false },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5 },
         "size": { "value": 3, "random": true },
         "line_linked": { "enable": true, "distance": 150, "color": "#bb86fc", "opacity": 0.4, "width": 1 },
-        "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+        "move": { "enable": true, "speed": 2, "out_mode": "out" }
       },
       "interactivity": {
         "detect_on": "canvas",
@@ -657,266 +472,99 @@ This project proves that low-cost embedded systems can achieve high-performance 
       "retina_detect": true
     });
   </script>
-  <!-- Intersection Observer for About Section Fade-In Effect -->
+
   <script>
-    const aboutSection = document.getElementById('about');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          aboutSection.classList.add('animate');
-          aboutSection.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.5 });
-    observer.observe(aboutSection);
-  </script>
-  <!-- Tab and Modal Functionality -->
-  <script>
-    // Tabs (includes Experience tab)
+    // Tabs: wired to use data-tab; Experience is default active in HTML
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         tabButtons.forEach(b => b.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
       });
     });
-    // Set default active tab (Projects)
-    document.querySelectorAll('.tab-btn').forEach(b => {
-      if (b.dataset.tab === 'projects') { b.classList.add('active'); document.getElementById('projects').classList.add('active'); }
+
+    // Modal helpers
+    function openModal(id){ document.getElementById(id).classList.add('active'); document.body.style.overflow='hidden'; }
+    function closeModal(id){ document.getElementById(id).classList.remove('active'); document.body.style.overflow=''; }
+    window.addEventListener('click', function(e){
+      document.querySelectorAll('.modal.active').forEach(modal => { if(e.target === modal){ modal.classList.remove('active'); document.body.style.overflow=''; } });
     });
 
-    // Modal handling
-    function openModal(modalId) {
-      document.getElementById(modalId).classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.remove('active');
-      document.body.style.overflow = '';
-    }
-    window.onclick = function(event) {
-      document.querySelectorAll('.modal.active').forEach(function(modal) {
-        if (event.target === modal) {
-          modal.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-    };
-  </script>
-  <!-- Certificate Section: Dynamic Generation -->
-  <script>
+    // Dynamic certificates
     const certificates = [
-      {
-        id: 'modal-cert1',
-        title: 'ABB-Internship',
-        details: 'Robotics and Process Automation Intern.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/ABB.jpg'
-      },
-      {
-        id: 'modal-cert2',
-        title: 'Acmegrade-Internship',
-        details: 'Artificial Intelligence Intern.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Justin%20Varghese%20John_Internship%20Completion.jpg'
-      },
-      {
-        id: 'modal-cert3',
-        title: 'IIITH',
-        details: 'College Research Affiliate.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/IIITH%20certificate_page.jpg'
-      },
-      {
-        id: 'modal-cert4',
-        title: 'Training Certification',
-        details: 'Android App Development.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Android%20App%20Development%20Training%20-%20Certificate%20of%20Completion_page-0001.jpg'
-      },
-      {
-        id: 'modal-cert5',
-        title: 'IBM-Course',
-        details: 'Databases and SQL for Data Science with Python.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/sql.jpg'
-      },
-      {
-        id: 'modal-cert6',
-        title: 'Workshop-Certificate',
-        details: 'IoT and Drone.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Iot%20and%20drone_page.jpg'
-      },
-      {
-        id: 'modal-cert7',
-        title: 'MATLAB-Certification',
-        details: 'MATLAB Fundamentals.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20MAtlab%20fund.jpg'
-      },
-      {
-        id: 'modal-cert8',
-        title: 'MATLAB-Certification',
-        details: 'MATLAB Programming Techniques.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20MATLAB%20programming.jpg'
-      },
-      {
-        id: 'modal-cert9',
-        title: 'MATLAB-Certification',
-        details: 'MATLAB for Data Processing and Visualization.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20matlab%20data_page-0001.jpg'
-      },
-      {
-        id: 'modal-cert10',
-        title: 'NPTEL Course',
-        details: 'Robotics and Control: Theory and Practice.',
-        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Robotics%20and%20Control.jpeg'
-      }
+      { id: 'modal-cert1', title: 'ABB-Internship', details: 'Robotics and Process Automation Intern.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/ABB.jpg' },
+      { id: 'modal-cert2', title: 'Acmegrade-Internship', details: 'Artificial Intelligence Intern.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Justin%20Varghese%20John_Internship%20Completion.jpg' },
+      { id: 'modal-cert3', title: 'IIITH', details: 'College Research Affiliate.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/IIITH%20certificate_page.jpg' },
+      { id: 'modal-cert4', title: 'Training Certification', details: 'Android App Development.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Android%20App%20Development%20Training%20-%20Certificate%20of%20Completion_page-0001.jpg' },
+      { id: 'modal-cert5', title: 'IBM-Course', details: 'Databases and SQL for Data Science with Python.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/sql.jpg' },
+      { id: 'modal-cert6', title: 'Workshop-Certificate', details: 'IoT and Drone.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Iot%20and%20drone_page.jpg' },
+      { id: 'modal-cert7', title: 'MATLAB-Certification', details: 'MATLAB Fundamentals.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20MAtlab%20fund.jpg' },
+      { id: 'modal-cert8', title: 'MATLAB-Certification', details: 'MATLAB Programming Techniques.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20MATLAB%20programming.jpg' },
+      { id: 'modal-cert9', title: 'MATLAB-Certification', details: 'MATLAB for Data Processing and Visualization.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20matlab%20data_page-0001.jpg' },
+      { id: 'modal-cert10', title: 'NPTEL Course', details: 'Robotics and Control: Theory and Practice.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Robotics%20and%20Control.jpeg' }
     ];
 
-    function renderCertificates() {
+    function renderCertificates(){
       const container = document.getElementById('certificate-container');
       certificates.forEach(cert => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.setAttribute('onclick', "openModal('" + cert.id + "')");
-        card.innerHTML = `
-          <i class="fas fa-certificate"></i>
-          <h3>${cert.title}</h3>
-          <p>${cert.details}</p>
-        `;
+        const card = document.createElement('div'); card.className='card';
+        card.setAttribute('onclick', `openModal("${cert.id}")`);
+        card.innerHTML = `<i class="fas fa-certificate"></i><h3>${cert.title}</h3><p>${cert.details}</p>`;
         container.appendChild(card);
-        
-        const modal = document.createElement('div');
-        modal.id = cert.id;
-        modal.className = 'modal';
-        modal.innerHTML = `
-          <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('${cert.id}')">&times;</span>
-            <h2>${cert.title}</h2>
-            <img src="${cert.image}" alt="${cert.title}" style="width:100%; border-radius:8px;">
-            <p>${cert.details}</p>
-          </div>
-        `;
+        const modal = document.createElement('div'); modal.id = cert.id; modal.className='modal';
+        modal.innerHTML = `<div class="modal-content"><span class="modal-close" onclick="closeModal('${cert.id}')">&times;</span><h2>${cert.title}</h2><img src="${cert.image}" alt="${cert.title}" style="width:100%; border-radius:8px;"><p>${cert.details}</p></div>`;
         document.body.appendChild(modal);
       });
     }
-    document.addEventListener("DOMContentLoaded", renderCertificates);
-  </script>
-  <!-- Tech Stack: Dynamic Generation -->
-  <script>
+    document.addEventListener('DOMContentLoaded', renderCertificates);
+
+    // Tech stack rendering
     const techCategories = [
-      {
-        category: "Programming Languages",
-        skills: [
-          { title: "Python", icon: "fab fa-python", details: "Python programming language" },
-          { title: "C", icon: "fas fa-code", details: "C programming language" },
-          { title: "MATLAB", icon: "fas fa-flask", details: "MATLAB environment" },
-          { title: "SQL", icon: "fas fa-database", details: "SQL for databases" },
-          { title: "C++", icon: "fas fa-code-branch", details: "C++ programming language" }
-        ]
-      },
-      {
-        category: "Machine Learning & AI",
-        skills: [
-          { title: "TensorFlow", icon: "fas fa-brain", details: "TensorFlow framework" },
-          { title: "Machine Learning", icon: "fas fa-brain", details: "Machine Learning" },
-          { title: "Deep Learning", icon: "fas fa-brain", details: "Deep Learning" },
-          { title: "Computer Vision", icon: "fas fa-eye", details: "Computer Vision" },
-          { title: "PyTorch", icon: "fas fa-fire", details: "PyTorch framework" },
-          { title: "AI for Perception", icon: "fas fa-eye", details: "AI for Perception" },
-          { title: "AI Deployment", icon: "fas fa-tachometer-alt", details: "Real-time AI deployment" },
-          { title: "Large-scale Data Processing", icon: "fas fa-server", details: "Data processing" },
-          { title: "Optimization", icon: "fas fa-sliders-h", details: "Optimization techniques" },
-          { title: "Neural Networks", icon: "fas fa-network-wired", details: "Neural Networks" },
-          { title: "Embedded AI", icon: "fas fa-microchip", details: "Embedded AI solutions" }
-        ]
-      },
-      {
-        category: "Robotics",
-        skills: [
-          { title: "ROS", icon: "fas fa-robot", details: "Robot Operating System" },
-          { title: "SLAM", icon: "fas fa-map-marked-alt", details: "Simultaneous Localization and Mapping" },
-          { title: "Gazebo", icon: "fas fa-cubes", details: "Gazebo simulation" },
-          { title: "Simulink", icon: "fas fa-cogs", details: "Simulink modeling" },
-          { title: "PLC", icon: "fas fa-plug", details: "Programmable Logic Controller" },
-          { title: "SCADA", icon: "fas fa-tachometer-alt", details: "SCADA systems" },
-          { title: "PID Control", icon: "fas fa-adjust", details: "PID Control" },
-          { title: "Autonomous Systems", icon: "fas fa-car", details: "Autonomous systems" },
-          { title: "OpenCV", icon: "fas fa-camera", details: "OpenCV library" },
-          { title: "Robotic Hardware", icon: "fas fa-cogs", details: "Robotic hardware" }
-        ]
-      },
-      {
-        category: "Software & Tools",
-        skills: [
-          { title: "SolidWorks", icon: "fas fa-drafting-compass", details: "SolidWorks CAD" },
-          { title: "Linux", icon: "fab fa-linux", details: "Linux OS" },
-          { title: "Arduino IDE", icon: "fab fa-arduino", details: "Arduino development" },
-          { title: "Edge Computing", icon: "fas fa-cloud", details: "Edge computing" },
-          { title: "Jetson", icon: "fas fa-microchip", details: "NVIDIA Jetson for edge AI" },
-          { title: "Raspberry Pi", icon: "fab fa-raspberry-pi", details: "Raspberry Pi computing platform" }
-        ]
-      }
+      { category: "Programming Languages", skills: [ { title:"Python", icon:"fab fa-python", details:"Python programming language" }, { title:"C", icon:"fas fa-code", details:"C programming language" }, { title:"MATLAB", icon:"fas fa-flask", details:"MATLAB environment" }, { title:"SQL", icon:"fas fa-database", details:"SQL for databases" }, { title:"C++", icon:"fas fa-code-branch", details:"C++ programming language" } ] },
+      { category: "Machine Learning & AI", skills: [ { title:"TensorFlow", icon:"fas fa-brain", details:"TensorFlow framework" }, { title:"Machine Learning", icon:"fas fa-brain", details:"Machine Learning" }, { title:"Deep Learning", icon:"fas fa-brain", details:"Deep Learning" }, { title:"Computer Vision", icon:"fas fa-eye", details:"Computer Vision" }, { title:"PyTorch", icon:"fas fa-fire", details:"PyTorch framework" }, { title:"AI for Perception", icon:"fas fa-eye", details:"AI for Perception" }, { title:"AI Deployment", icon:"fas fa-tachometer-alt", details:"Real-time AI deployment" }, { title:"Large-scale Data Processing", icon:"fas fa-server", details:"Data processing" }, { title:"Optimization", icon:"fas fa-sliders-h", details:"Optimization techniques" }, { title:"Neural Networks", icon:"fas fa-network-wired", details:"Neural Networks" }, { title:"Embedded AI", icon:"fas fa-microchip", details:"Embedded AI solutions" } ] },
+      { category: "Robotics", skills: [ { title:"ROS", icon:"fas fa-robot", details:"Robot Operating System" }, { title:"SLAM", icon:"fas fa-map-marked-alt", details:"Simultaneous Localization and Mapping" }, { title:"Gazebo", icon:"fas fa-cubes", details:"Gazebo simulation" }, { title:"Simulink", icon:"fas fa-cogs", details:"Simulink modeling" }, { title:"PLC", icon:"fas fa-plug", details:"Programmable Logic Controller" }, { title:"SCADA", icon:"fas fa-tachometer-alt", details:"SCADA systems" }, { title:"PID Control", icon:"fas fa-adjust", details:"PID Control" }, { title:"Autonomous Systems", icon:"fas fa-car", details:"Autonomous systems" }, { title:"OpenCV", icon:"fas fa-camera", details:"OpenCV library" }, { title:"Robotic Hardware", icon:"fas fa-cogs", details:"Robotic hardware" } ] },
+      { category: "Software & Tools", skills: [ { title:"SolidWorks", icon:"fas fa-drafting-compass", details:"SolidWorks CAD" }, { title:"Linux", icon:"fab fa-linux", details:"Linux OS" }, { title:"Arduino IDE", icon:"fab fa-arduino", details:"Arduino development" }, { title:"Edge Computing", icon:"fas fa-cloud", details:"Edge computing" }, { title:"Jetson", icon:"fas fa-microchip", details:"NVIDIA Jetson for edge AI" }, { title:"Raspberry Pi", icon:"fab fa-raspberry-pi", details:"Raspberry Pi computing platform" } ] }
     ];
 
-    function renderTechSkills() {
+    function renderTechSkills(){
       const container = document.getElementById('tech-container');
-      techCategories.forEach(category => {
-        const categoryHeading = document.createElement('h3');
-        categoryHeading.innerText = category.category;
-        categoryHeading.style.textAlign = 'center';
-        categoryHeading.style.marginTop = '20px';
-        container.appendChild(categoryHeading);
-        
-        const grid = document.createElement('div');
-        grid.className = 'content-grid';
-        
-        category.skills.forEach(skill => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <i class="${skill.icon}"></i>
-            <h3>${skill.title}</h3>
-            <p>${skill.details}</p>
-          `;
+      techCategories.forEach(cat => {
+        const heading = document.createElement('h3'); heading.innerText = cat.category; heading.style.textAlign = 'center'; heading.style.marginTop='16px';
+        container.appendChild(heading);
+        const grid = document.createElement('div'); grid.className='content-grid';
+        cat.skills.forEach(skill => {
+          const card = document.createElement('div'); card.className='card';
+          card.innerHTML = `<i class="${skill.icon}"></i><h3>${skill.title}</h3><p>${skill.details}</p>`;
           grid.appendChild(card);
         });
         container.appendChild(grid);
       });
     }
-    document.addEventListener("DOMContentLoaded", renderTechSkills);
-  </script>
-  <!-- Custom Script for Email Copy and Formspree Submission -->
-  <script>
-    function copyEmail() {
-      const email = "justinvjohn25@gmail.com";
-      navigator.clipboard.writeText(email).then(() => {
-        alert("Email address copied to clipboard!");
-      }).catch(err => {
-        alert("Failed to copy email: " + err);
-      });
-    }
-    document.getElementById("contactForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      var form = this;
-      fetch(form.action, {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: new FormData(form)
-      }).then(response => {
-        if (response.ok) {
-          form.reset();
-          displayResponse("Your message has been sent successfully!", "success");
-        } else {
-          displayResponse("There was an error sending your message. Please try again later.", "error");
-        }
-      }).catch(error => {
-        displayResponse("There was an error sending your message. Please try again later.", "error");
-      });
+    document.addEventListener('DOMContentLoaded', renderTechSkills);
+
+    // Email copy + contact form handling
+    function copyEmail(){ navigator.clipboard.writeText('justinvjohn25@gmail.com').then(()=>alert('Email address copied to clipboard!')).catch(e=>alert('Failed to copy email.')); }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      const contactForm = document.getElementById('contactForm');
+      if(contactForm){
+        contactForm.addEventListener('submit', function(e){
+          e.preventDefault();
+          fetch(contactForm.action, { method:'POST', headers: { 'Accept':'application/json' }, body: new FormData(contactForm) })
+            .then(response => {
+              if(response.ok){ contactForm.reset(); displayResponse('Your message has been sent successfully!', 'success'); }
+              else displayResponse('There was an error sending your message. Please try again later.', 'error');
+            }).catch(()=> displayResponse('There was an error sending your message. Please try again later.', 'error'));
+        });
+      }
     });
-    function displayResponse(message, type) {
-      var responseDiv = document.getElementById("responseMessage");
-      responseDiv.style.display = "block";
-      responseDiv.textContent = message;
-      responseDiv.style.color = (type === "success") ? "green" : "red";
+
+    function displayResponse(msg, type){
+      const el = document.getElementById('responseMessage'); if(!el) return;
+      el.style.display='block'; el.textContent=msg; el.style.color = (type==='success') ? 'lightgreen' : 'salmon';
     }
   </script>
 </body>
