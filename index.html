@@ -11,10 +11,11 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-  <!-- AOS -->
+  <!-- AOS Library for Scroll Animations -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 
   <style>
+    /* Reset & Base Styles */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
@@ -22,11 +23,12 @@
       color: #e0e0e0;
       overflow-x: hidden;
       scroll-behavior: smooth;
-      scroll-padding-top: 80px;
+      scroll-padding-top: 80px; /* Accounts for fixed nav */
     }
     a { color: #bb86fc; text-decoration: none; }
     a:hover { color: #fff; }
 
+    /* Navigation */
     nav {
       position: fixed;
       top: 0;
@@ -39,8 +41,9 @@
       z-index: 1000;
     }
     nav .logo { font-size: 1.5em; font-weight: 600; }
-    nav .nav-links a { margin: 0 15px; font-weight: 500; }
+    nav .nav-links a { margin: 0 15px; font-weight: 500; transition: color 0.3s; }
 
+    /* Header */
     header {
       height: 100vh;
       padding-top: 80px;
@@ -49,32 +52,23 @@
       justify-content: center;
       text-align: center;
       overflow: hidden;
+      padding-left: 20px;
+      padding-right: 20px;
       margin-bottom: 50px;
     }
     #particles-js {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
     }
     .intro {
-      padding: 20px;
-      animation: fadeIn 2s forwards;
+      position: relative; z-index: 1; padding: 20px; animation: fadeIn 2s forwards;
     }
     header h1 { font-size: 3em; margin-bottom: 10px; }
-    header p { font-size: 1.2em; margin-bottom: 15px; }
-    header .btn {
-      background: #bb86fc;
-      color: #121212;
-      padding: 10px 20px;
-      border-radius: 4px;
-      font-weight: 600;
-    }
+    header p { font-size: 1.2em; margin-bottom: 20px; }
+    header .btn { background: #bb86fc; color: #121212; padding: 10px 20px; border-radius: 4px; font-weight: 600; transition: background 0.3s; }
+    header .btn:hover { background: #9a6cd3; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    /* Sections */
     .section {
       padding: 60px 20px;
       max-width: 1100px;
@@ -85,218 +79,643 @@
       text-align: center;
     }
 
+    #about { margin-top: 0; } /* header already pushes spacing */
+
     .section-title {
       font-size: 2em;
       margin-bottom: 24px;
       color: #bb86fc;
+      transition: transform 0.5s ease, opacity 0.5s ease;
     }
+    .section-title:hover { transform: scale(1.05); opacity: 1; }
 
-    .profile-container {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-    .profile-img-wrapper {
-      border: 4px solid #bb86fc;
-      padding: 5px;
-    }
-    .profile-img {
-      width: 200px;
-      height: 200px;
-      object-fit: cover;
-    }
-    .profile-description {
-      max-width: 600px;
-      text-align: left;
-      line-height: 1.6;
-      font-size: 1.05em;
-    }
-
+    .profile-container { display:flex; align-items:center; gap:20px; flex-wrap:wrap; padding:20px; justify-content:center; }
+    .profile-img-wrapper { flex-shrink:0; border:4px solid #bb86fc; padding:5px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+    .profile-img { width:200px; height:200px; object-fit:cover; border-radius:4px; }
+    .profile-description { flex:1; font-size:1.05em; line-height:1.6; max-width:600px; text-align:left; color:#e6e6e6; }
     .btn-group { margin-top: 18px; }
-    .download-btn, .contact-btn {
-      padding: 10px 20px;
-      font-weight: 600;
-      border-radius: 4px;
-      margin: 5px;
-      display: inline-block;
-    }
-    .download-btn {
-      background: linear-gradient(45deg, #bb86fc, #ff4081);
-      color: #121212;
-    }
-    .contact-btn {
-      background: #bb86fc;
-      color: #121212;
-    }
+    .download-btn, .contact-btn { display:inline-block; padding:10px 20px; font-weight:600; border-radius:4px; transition:transform 0.3s, background 0.3s; margin:5px; }
+    .download-btn { background: linear-gradient(45deg, #bb86fc, #ff4081); color:#121212; }
+    .contact-btn { background:#bb86fc; color:#121212; }
+    .download-btn:hover, .contact-btn:hover { transform: scale(1.03); }
 
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
+    /* Showcase Tabs */
+    #showcase { text-align:center; }
+    .tabs { display:flex; justify-content:center; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
     .tabs button {
-      background: #2c2c2c;
-      color: #e0e0e0;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 4px;
-      cursor: pointer;
+      background:#2c2c2c; color:#e0e0e0; border:none; padding:10px 16px; font-size:1em; border-radius:4px; cursor:pointer;
+      transition: background 0.3s, transform 0.3s; white-space:nowrap;
     }
-    .tabs button.active {
-      background: #bb86fc;
-      color: #121212;
-    }
+    .tabs button.active, .tabs button:hover { background:#bb86fc; color:#121212; transform:scale(1.05); }
 
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .tab-content { display:none; animation: slideInRight 0.45s forwards; }
+    .tab-content.active { display:block; }
+    @keyframes slideInRight { from { transform: translateX(100px); opacity:0; } to { transform: translateX(0); opacity:1; } }
 
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
+    .content-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; }
 
-    .card {
-      background: #2c2c2c;
-      padding: 20px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .card i {
-      font-size: 2em;
-      margin-bottom: 10px;
-      color: #bb86fc;
-    }
+    .card { background:#2c2c2c; padding:20px; border-radius:8px; cursor:pointer; text-align:center; transition:transform 0.25s ease, background 0.25s ease; }
+    .card:hover { transform: scale(1.03); background:#333; }
+    .card i { font-size:2em; margin-bottom:10px; color:#bb86fc; }
+    .card h3 { margin-bottom:10px; color:#e0e0e0; }
+    .card p { font-size:0.95em; color:#cfcfcf; }
 
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-    .modal.active { display: flex; }
-    .modal-content {
-      background: #1e1e1e;
-      padding: 24px;
-      border-radius: 8px;
-      max-width: 800px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 1.5em;
-      cursor: pointer;
-      color: #bb86fc;
-    }
+    /* Modal */
+    .modal { position:fixed; top:0; left:0; width:100%; height:100%; display:none; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:2000; padding:20px; }
+    .modal.active { display:flex; }
+    .modal-content { background:#1e1e1e; padding:24px; border-radius:8px; max-width:800px; width:90%; position:relative; max-height:90vh; overflow-y:auto; }
+    .modal-close { position:absolute; top:10px; right:10px; font-size:1.5em; cursor:pointer; color:#bb86fc; }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #1e1e1e;
-      color: #ccc;
+    /* Contact */
+    #contact .contact-form { max-width:600px; margin:0 auto; text-align:left; }
+    #contact .form-group { margin-bottom:15px; }
+    #contact input, #contact textarea { width:100%; padding:10px; border-radius:4px; border:1px solid #444; background:#2c2c2c; color:#e0e0e0; }
+
+    footer { text-align:center; padding:20px; background:#1e1e1e; color:#ccc; margin-top:20px; }
+
+    /* Responsive */
+    @media (max-width:768px) {
+      header h1 { font-size:2.4em; } header p { font-size:1em; }
+      .section-title { font-size:1.8em; }
+    }
+    @media (max-width:480px) {
+      .profile-img { width:140px; height:140px; }
+      .profile-description { font-size:0.95em; }
     }
   </style>
 </head>
-
 <body>
-
-<nav>
-  <div class="logo"><strong>Justin Varghese John</strong></div>
-  <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#showcase">Showcase</a>
-    <a href="#contact">Contact</a>
-  </div>
-</nav>
-
-<header>
-  <div id="particles-js"></div>
-  <div class="intro" data-aos="fade-up">
-    <h1>Justin Varghese John</h1>
-    <p>Master’s student in Robotics and Autonomous Systems (AI) at Arizona State University</p>
-    <p>Robotics researcher and AI engineer focused on autonomous systems</p>
-    <a href="#about" class="btn">Learn More</a>
-  </div>
-</header>
-
-<section id="about" class="section">
-  <h2 class="section-title">About Me</h2>
-  <div class="profile-container">
-    <div class="profile-img-wrapper">
-      <img src="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/pic.jpg" class="profile-img" alt="Profile image">
+  <!-- Navigation -->
+  <nav>
+    <div class="logo"><strong>Justin Varghese John</strong></div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#showcase">Showcase</a>
+      <a href="#contact">Contact</a>
     </div>
-    <div class="profile-description">
-      <p>
-        I am a robotics and AI engineer currently pursuing a master’s degree in Robotics and Autonomous Systems at Arizona State University.
-        My work focuses on robot planning, autonomous navigation, embedded AI, and perception.
-        I enjoy building systems that start in simulation and are later deployed on real robotic platforms.
-        I have experience with multi-robot systems, edge AI on NVIDIA Jetson, industrial automation using PLC and SCADA,
-        and designing reproducible experimental pipelines.
-        I am actively looking for robotics or AI roles where I can build reliable, real-time autonomous systems.
-      </p>
-      <div class="btn-group">
-        <a href="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/JUSTIN_JOHN_RESUME.pdf" class="download-btn" target="_blank" download>Download CV</a>
-        <a href="#contact" class="contact-btn">Contact Me</a>
-      </div>
+  </nav>
+
+  <!-- Header -->
+  <header id="home">
+    <div id="particles-js"></div>
+    <div class="intro" data-aos="fade-up">
+      <h1>Justin Varghese John</h1>
+      <p>Master’s in Robotics and Autonomous Systems (AI), Arizona State University</p>
+      <p>Robotics researcher, AI developer, and autonomous systems engineer</p>
+      <a href="#about" class="btn">Learn More</a>
     </div>
-  </div>
-</section>
+  </header>
 
-<section id="showcase" class="section">
-  <h2 class="section-title">Showcase</h2>
-
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="experience">Experience</button>
-    <button class="tab-btn" data-tab="projects">Projects</button>
-    <button class="tab-btn" data-tab="certifications">Certifications</button>
-    <button class="tab-btn" data-tab="tech">Tech Stack</button>
-    <button class="tab-btn" data-tab="education">Education</button>
-  </div>
-
-  <div id="experience" class="tab-content active">
-    <div class="content-grid">
-      <div class="card" onclick="openModal('modal-exp1')">
-        <i class="fas fa-briefcase"></i>
-        <h3>Graduate Researcher, AAIR Lab</h3>
-        <p>Arizona State University (July 2025 to Present)</p>
-        <p>Conducting master’s thesis research in robot planning and decision making for autonomous systems.</p>
+  <!-- About Section -->
+  <section id="about" class="section" data-aos="fade-up">
+    <h2 class="section-title">About Me</h2>
+    <div class="profile-container" data-aos="fade-up" data-aos-delay="200">
+      <div class="profile-img-wrapper">
+        <img src="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/pic.jpg" class="profile-img" alt="Profile Image">
       </div>
 
-      <div class="card" onclick="openModal('modal-exp2')">
-        <i class="fas fa-briefcase"></i>
-        <h3>Robotics Engineering Intern, Cartken</h3>
-        <p>Tempe, Arizona (May 2025 to August 2025)</p>
-        <p>Worked on autonomous delivery robots with a focus on sustainability, prototyping, and embedded systems.</p>
-      </div>
+      <div class="profile-description">
+        <p>
+          I am a robotics and AI engineer pursuing an MS in Robotics and Autonomous Systems (AI) at Arizona State University.
+          My work focuses on robot planning, autonomous navigation, embedded AI, and perception, and I enjoy taking systems from
+          simulation and digital twins into real-world deployment. I have experience in multi-robot coordination, edge AI on NVIDIA Jetson,
+          industrial automation (PLC and SCADA), and building reproducible experimental pipelines. I am actively seeking robotics or AI roles
+          where I can design and ship real-time, scalable autonomous systems.
+        </p>
 
-      <div class="card" onclick="openModal('modal-exp3')">
-        <i class="fas fa-briefcase"></i>
-        <h3>Process Automation and Robotics Intern, ABB</h3>
-        <p>Bangalore, India (October 2022)</p>
-        <p>Gained hands-on experience with industrial robotics, PLC systems, and SCADA-based automation.</p>
+        <div class="btn-group">
+          <a href="https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/JUSTIN_JOHN_RESUME.pdf" class="download-btn" target="_blank" download>Download CV</a>
+          <a href="#contact" class="contact-btn">Contact Me</a>
+        </div>
       </div>
     </div>
+  </section>
+
+  <!-- Showcase (tabs) -->
+  <section id="showcase" class="section" data-aos="fade-up">
+    <h2 class="section-title">Showcase</h2>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="experience">Experience</button>
+      <button class="tab-btn" data-tab="projects">Projects</button>
+      <button class="tab-btn" data-tab="certifications">Certifications</button>
+      <button class="tab-btn" data-tab="tech">Tech Stack</button>
+      <button class="tab-btn" data-tab="education">Education</button>
+    </div>
+
+    <!-- Experience Tab (default active) -->
+    <div id="experience" class="tab-content active">
+      <div class="content-grid">
+        <div class="card" onclick="openModal('modal-exp1')">
+          <i class="fas fa-briefcase"></i>
+          <h3>Graduate Researcher, AAIR Lab</h3>
+          <p>Arizona State University (Jul 2025 to Present)</p>
+          <p>Master’s thesis research in robot planning, focused on decision making and planning frameworks for autonomous robotic systems.</p>
+        </div>
+
+        <div class="card" onclick="openModal('modal-exp2')">
+          <i class="fas fa-briefcase"></i>
+          <h3>Robotics Engineering Intern, Cartken (EPICS)</h3>
+          <p>Tempe, AZ (May 2025 to Aug 2025)</p>
+          <p>Analyzed lifecycle and environmental impact of autonomous delivery robots, and supported prototyping, troubleshooting, and programming.</p>
+        </div>
+
+        <div class="card" onclick="openModal('modal-exp3')">
+          <i class="fas fa-briefcase"></i>
+          <h3>Process Automation and Robotics Intern, ABB</h3>
+          <p>Bangalore, India (Oct 2022)</p>
+          <p>Worked on industrial automation workflows and gained hands-on experience with PLC and SCADA systems.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects Tab -->
+    <div id="projects" class="tab-content">
+      <div class="content-grid">
+        <div class="card" onclick="openModal('modal-project6')">
+          <h3>ReflexDodgeBot: Real-Time Evasion Using Monocular Vision on Embedded Hardware</h3>
+          <p>AI system for obstacle detection and reflex-like evasion using monocular vision.</p>
+        </div>
+        <div class="card" onclick="openModal('modal-project1')">
+          <h3>Autonomous Surveillance Vehicle</h3>
+          <p>AI system for collision avoidance, path following, and real-time monitoring.</p>
+        </div>
+        <div class="card" onclick="openModal('modal-project2')">
+          <h3>Multi-Robot Exploration</h3>
+          <p>Navigation framework using a modified Lévy walk with potential field-based collision avoidance.</p>
+        </div>
+        <div class="card" onclick="openModal('modal-project3')">
+          <h3>Real-Time Incident Detection</h3>
+          <p>Deep learning model trained on 300,000+ images, optimized for edge deployment with 95% accuracy.</p>
+        </div>
+        <div class="card" onclick="openModal('modal-project4')">
+          <h3>Road Marking System</h3>
+          <p>MATLAB-based semantic segmentation for lane detection on unmarked rural roads.</p>
+        </div>
+        <div class="card" onclick="openModal('modal-project5')">
+          <h3>Autonomous Maze-Solving Robot</h3>
+          <p>BFS pathfinding and digital twin simulation for robust maze navigation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certifications Tab -->
+    <div id="certifications" class="tab-content">
+      <div class="content-grid" id="certificate-container"></div>
+    </div>
+
+    <!-- Tech Stack Tab -->
+    <div id="tech" class="tab-content">
+      <div id="tech-container"></div>
+    </div>
+
+    <!-- Education Tab -->
+    <div id="education" class="tab-content">
+      <div class="content-grid">
+        <div class="card">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Master of Science in Robotics and Autonomous Systems (AI)</h3>
+          <p>Arizona State University (Aug 2024 to Expected May 2026)</p>
+          <p>GPA: 4.00/4.00</p>
+        </div>
+        <div class="card">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Bachelor of Technology (Honors), Robotics and Automation</h3>
+          <p>APJ Abdul Kalam Technological University (Aug 2019 to Aug 2023)</p>
+          <p>Minor: Computer Science and Engineering (AI), CGPA: 3.72/4.00</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Project Modals -->
+  <div id="modal-project1" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project1')">&times;</span>
+      <h2>Autonomous Surveillance Vehicle</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Designed and developed an AI-powered surveillance vehicle capable of collision avoidance, path following, and real-time environmental monitoring using NVIDIA Jetson Nano. The system integrates deep learning and image processing to autonomously navigate diverse environments for smart cities, warehouses, and security applications.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>The Autonomous Surveillance Vehicle is a self-navigating robotic system built to monitor surroundings, detect obstacles, and autonomously follow roads using computer vision and AI-based decision-making. The project was developed by leading a team of four engineers and deployed on NVIDIA Jetson Nano with ROS for real-time communication and control.
+        Collision Avoidance and Path Following: Integrated a dual-camera vision system with real-time object detection using deep learning (TensorFlow and OpenCV) to classify scenarios as free or blocked and maneuver accordingly.
+        Real-Time Surveillance and Monitoring: Enabled image classification and environmental monitoring, allowing the vehicle to detect anomalies and potential security threats.
+        Embedded AI Deployment: Optimized Jetson Nano-based deep learning models to run efficiently for real-time processing.
+        Applications: Can be deployed for urban surveillance, warehouse monitoring, and industrial automation.</p>
+    </div>
   </div>
-</section>
 
-<footer>
-  <p>© 2025 Justin Varghese John. All rights reserved.</p>
-</footer>
+  <div id="modal-project2" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project2')">&times;</span>
+      <h2>Multi-Robot Exploration</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Developed a multi-robot exploration framework using a modified Lévy walk strategy and potential field-based collision avoidance to improve area coverage and mapping efficiency. Simulated in MATLAB.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>The project focused on improving autonomous exploration by designing a multi-robot system capable of efficient navigation, collaborative mapping, and obstacle avoidance.
+        Intelligent Exploration Algorithm: Implemented a modified Lévy walk strategy to improve coverage while preventing robots from clustering.
+        Collision Avoidance and Path Planning: Combined potential fields with multi-agent coordination.
+        Simulated Environment and Validation: Validated in MATLAB, achieving over 90% map coverage efficiency.
+        Seamless Map Merging: Each robot’s local map was merged into a complete map.
+        Applications: Search and rescue, planetary exploration, and autonomous warehouse logistics.</p>
+    </div>
+  </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-<script>AOS.init({ duration: 1000, once: true });</script>
+  <div id="modal-project3" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project3')">&times;</span>
+      <h2>Real-Time Incident Detection</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Developed an AI-powered real-time incident detection system using deep learning and edge AI to identify accidents, hazards, and obstructions with 95% accuracy. Optimized using TensorFlow Lite and deployed on NVIDIA Jetson Nano. A lightweight version was deployed on Arduino Nano 33 BLE using Edge Impulse.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>This project improves road safety and traffic management by integrating deep learning-based incident detection with low-power edge AI for real-time decision-making.
+        A CNN was trained on 300,000+ road images using TensorFlow and achieved 95% precision.
+        The model was optimized using TensorFlow Lite, reducing size by 75% while maintaining accuracy.
+        Deployed on Jetson Nano for real-time inference, and on Arduino Nano 33 BLE using Edge Impulse for low-power use.
+        A LoRaWAN-based alert system transmits incident data for early warnings and routing suggestions.
+        The system integrates with intelligent transportation systems and supports scalability.</p>
+    </div>
+  </div>
 
+  <div id="modal-project4" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project4')">&times;</span>
+      <h2>Road Marking System</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Designed a MATLAB-based road marking system using semantic segmentation and image processing to detect and mark lanes on unmarked rural roads. Supports lane-following and improved navigation in unstructured environments.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>Semantic segmentation was used to differentiate road surfaces from surrounding regions and identify drivable areas.
+        Canny edge detection and Hough transforms were used to extract lane boundaries and generate virtual lane markings.
+        A lane departure warning mechanism detects vehicle position relative to generated lanes and triggers alerts.
+        Applications include autonomous driving, agricultural automation, and off-road autonomous vehicles.</p>
+    </div>
+  </div>
+
+  <div id="modal-project5" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project5')">&times;</span>
+      <h2>Autonomous Maze-Solving Robot</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Developed an autonomous maze-solving robot using MyCobot Pro 600, integrating vision, path planning, and a digital twin simulation to improve navigation accuracy.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>Designed a MATLAB-Simulink digital twin of MyCobot Pro 600 and validated forward and inverse kinematics.
+        Built a vision-based system that extracts the maze layout and uses BFS for shortest-path planning.
+        Executed the planned path on the real robot using kinematic control for accurate end-effector motion.</p>
+    </div>
+  </div>
+
+  <div id="modal-project6" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project6')">&times;</span>
+      <h2>ReflexDodgeBot: Real-Time Evasion Using Monocular Vision on Embedded Hardware</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Built a real-time object detection and evasion system for mobile robots using monocular vision on low-cost embedded hardware. Uses YOLOv8n for detection and monocular depth estimation for reflex-like obstacle avoidance on NVIDIA Jetson Nano.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>The system uses YOLOv8n for object detection and a monocular depth approach to estimate distance from RGB input.
+        A Kalman filter tracks object motion and triggers evasive maneuvers based on approach velocity and relative position.
+        The robot uses mecanum wheels for omnidirectional movement.
+        Deployment was optimized for Jetson Nano with TensorRT and FP16 to maintain real-time performance.</p>
+    </div>
+  </div>
+
+  <!-- Experience Modals -->
+  <div id="modal-exp1" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-exp1')">&times;</span>
+      <h2>Graduate Researcher, Autonomous Agents and Intelligent Robots (AAIR) Lab</h2>
+      <p><strong>Arizona State University (Jul 2025 to Present)</strong></p>
+      <p>Conducting master’s thesis research in robot planning under Prof. Siddharth Srivastava, focused on decision making and planning frameworks for autonomous robotic systems. Work includes developing and testing planning algorithms for integration with perception and control in real-world autonomous platforms.</p>
+    </div>
+  </div>
+
+  <div id="modal-exp2" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-exp2')">&times;</span>
+      <h2>Robotics Engineering Intern, Cartken (EPICS)</h2>
+      <p><strong>Tempe, AZ (May 2025 to Aug 2025)</strong></p>
+      <p>Collaborated with Cartken through ASU’s EPICS program to analyze the lifecycle and environmental impact of autonomous delivery robots, with a focus on sustainable reuse and recycling of components. Supported robot prototyping, electrical troubleshooting, and programming.</p>
+    </div>
+  </div>
+
+  <div id="modal-exp3" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-exp3')">&times;</span>
+      <h2>Process Automation and Robotics Intern, ABB India Ltd</h2>
+      <p><strong>Bangalore, India (Oct 2022)</strong></p>
+      <p>Collaborated with engineers on industrial automation workflows and gained hands-on experience with PLC and SCADA systems in robotics and automation environments.</p>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <section id="contact" class="section" data-aos="fade-up">
+    <h2 class="section-title">Contact Me</h2>
+    <div class="contact-icons" style="margin-bottom:14px;">
+      <a href="https://www.linkedin.com/in/justin-varghese-john" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="javascript:void(0)" onclick="copyEmail()" title="Copy Email"><i class="fas fa-envelope"></i></a>
+    </div>
+
+    <div class="contact-form">
+      <p style="color:#cfcfcf;">If you'd like to reach out, please fill out the form below:</p>
+      <form id="contactForm" action="https://formspree.io/f/xqapawaq" method="POST">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="userEmail">Email:</label>
+          <input type="email" id="userEmail" name="userEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="download-btn" style="background:#bb86fc; color:#121212; border:none;">Send Message</button>
+      </form>
+      <div id="responseMessage"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Justin Varghese John. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ duration: 1000, once: true });
+  </script>
+
+  <!-- Particles.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": "#bb86fc" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5 },
+        "size": { "value": 3, "random": true },
+        "line_linked": { "enable": true, "distance": 150, "color": "#bb86fc", "opacity": 0.4, "width": 1 },
+        "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+        "modes": { "repulse": { "distance": 100 }, "push": { "particles_nb": 4 } }
+      },
+      "retina_detect": true
+    });
+  </script>
+
+  <!-- Tabs and Modals -->
+  <script>
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+j        );
+        tabContents.forEach(content => content.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    window.onclick = function(event) {
+      document.querySelectorAll('.modal.active').forEach(function(modal) {
+        if (event.target === modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    };
+  </script>
+
+  <!-- Certificate Section: Dynamic Generation -->
+  <script>
+    const certificates = [
+      {
+        id: 'modal-cert1',
+        title: 'ABB Internship',
+        details: 'Robotics and Process Automation Intern.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/ABB.jpg'
+      },
+      {
+        id: 'modal-cert2',
+        title: 'Acmegrade Internship',
+        details: 'Artificial Intelligence Intern.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Justin%20Varghese%20John_Internship%20Completion.jpg'
+      },
+      {
+        id: 'modal-cert3',
+        title: 'IIITH',
+        details: 'College Research Affiliate.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/IIITH%20certificate_page.jpg'
+      },
+      {
+        id: 'modal-cert4',
+        title: 'Training Certification',
+        details: 'Android App Development.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Android%20App%20Development%20Training%20-%20Certificate%20of%20Completion_page-0001.jpg'
+      },
+      {
+        id: 'modal-cert5',
+        title: 'IBM Course',
+        details: 'Databases and SQL for Data Science with Python.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/sql.jpg'
+      },
+      {
+        id: 'modal-cert6',
+        title: 'Workshop Certificate',
+        details: 'IoT and Drone.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Iot%20and%20drone_page.jpg'
+      },
+      {
+        id: 'modal-cert7',
+        title: 'MATLAB Certification',
+        details: 'MATLAB Fundamentals.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20MAtlab%20fund.jpg'
+      },
+      {
+        id: 'modal-cert8',
+        title: 'MATLAB Certification',
+        details: 'MATLAB Programming Techniques.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20MATLAB%20programming.jpg'
+      },
+      {
+        id: 'modal-cert9',
+        title: 'MATLAB Certification',
+        details: 'MATLAB for Data Processing and Visualization.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20matlab%20data_page-0001.jpg'
+      },
+      {
+        id: 'modal-cert10',
+        title: 'NPTEL Course',
+        details: 'Robotics and Control: Theory and Practice.',
+        image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Robotics%20and%20Control.jpeg'
+      }
+    ];
+
+    function renderCertificates() {
+      const container = document.getElementById('certificate-container');
+      certificates.forEach(cert => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('onclick', "openModal('" + cert.id + "')");
+        card.innerHTML = `
+          <i class="fas fa-certificate"></i>
+          <h3>${cert.title}</h3>
+          <p>${cert.details}</p>
+        `;
+        container.appendChild(card);
+
+        const modal = document.createElement('div');
+        modal.id = cert.id;
+        modal.className = 'modal';
+        modal.innerHTML = `
+          <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('${cert.id}')">&times;</span>
+            <h2>${cert.title}</h2>
+            <img src="${cert.image}" alt="${cert.title}" style="width:100%; border-radius:8px;">
+            <p>${cert.details}</p>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      });
+    }
+    document.addEventListener("DOMContentLoaded", renderCertificates);
+  </script>
+
+  <!-- Tech Stack: Dynamic Generation -->
+  <script>
+    const techCategories = [
+      {
+        category: "Programming Languages",
+        skills: [
+          { title: "Python", icon: "fab fa-python", details: "Python programming language" },
+          { title: "C", icon: "fas fa-code", details: "C programming language" },
+          { title: "MATLAB", icon: "fas fa-flask", details: "MATLAB environment" },
+          { title: "SQL", icon: "fas fa-database", details: "SQL for databases" },
+          { title: "C++", icon: "fas fa-code-branch", details: "C++ programming language" }
+        ]
+      },
+      {
+        category: "Machine Learning and AI",
+        skills: [
+          { title: "TensorFlow", icon: "fas fa-brain", details: "TensorFlow framework" },
+          { title: "Machine Learning", icon: "fas fa-brain", details: "Machine learning methods" },
+          { title: "Deep Learning", icon: "fas fa-brain", details: "Deep learning models" },
+          { title: "Computer Vision", icon: "fas fa-eye", details: "Computer vision" },
+          { title: "PyTorch", icon: "fas fa-fire", details: "PyTorch framework" },
+          { title: "AI for Perception", icon: "fas fa-eye", details: "Perception-focused AI" },
+          { title: "AI Deployment", icon: "fas fa-tachometer-alt", details: "Real-time AI deployment" },
+          { title: "Large-scale Data Processing", icon: "fas fa-server", details: "Data processing pipelines" },
+          { title: "Optimization", icon: "fas fa-sliders-h", details: "Model and system optimization" },
+          { title: "Neural Networks", icon: "fas fa-network-wired", details: "Neural networks" },
+          { title: "Embedded AI", icon: "fas fa-microchip", details: "Embedded AI solutions" }
+        ]
+      },
+      {
+        category: "Robotics",
+        skills: [
+          { title: "ROS", icon: "fas fa-robot", details: "Robot Operating System" },
+          { title: "SLAM", icon: "fas fa-map-marked-alt", details: "Simultaneous localization and mapping" },
+          { title: "Gazebo", icon: "fas fa-cubes", details: "Gazebo simulation" },
+          { title: "Simulink", icon: "fas fa-cogs", details: "Simulink modeling" },
+          { title: "PLC", icon: "fas fa-plug", details: "Programmable Logic Controller" },
+          { title: "SCADA", icon: "fas fa-tachometer-alt", details: "SCADA systems" },
+          { title: "PID Control", icon: "fas fa-adjust", details: "PID control" },
+          { title: "Autonomous Systems", icon: "fas fa-car", details: "Autonomous systems" },
+          { title: "OpenCV", icon: "fas fa-camera", details: "OpenCV library" },
+          { title: "Robotic Hardware", icon: "fas fa-cogs", details: "Robotic hardware" }
+        ]
+      },
+      {
+        category: "Software and Tools",
+        skills: [
+          { title: "SolidWorks", icon: "fas fa-drafting-compass", details: "SolidWorks CAD" },
+          { title: "Linux", icon: "fab fa-linux", details: "Linux operating system" },
+          { title: "Arduino IDE", icon: "fab fa-arduino", details: "Arduino development" },
+          { title: "Edge Computing", icon: "fas fa-cloud", details: "Edge computing" },
+          { title: "Jetson", icon: "fas fa-microchip", details: "NVIDIA Jetson for edge AI" },
+          { title: "Raspberry Pi", icon: "fab fa-raspberry-pi", details: "Raspberry Pi computing platform" }
+        ]
+      }
+    ];
+
+    function renderTechSkills() {
+      const container = document.getElementById('tech-container');
+      techCategories.forEach(category => {
+        const categoryHeading = document.createElement('h3');
+        categoryHeading.innerText = category.category;
+        categoryHeading.style.textAlign = 'center';
+        categoryHeading.style.marginTop = '20px';
+        container.appendChild(categoryHeading);
+
+        const grid = document.createElement('div');
+        grid.className = 'content-grid';
+
+        category.skills.forEach(skill => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <i class="${skill.icon}"></i>
+            <h3>${skill.title}</h3>
+            <p>${skill.details}</p>
+          `;
+          grid.appendChild(card);
+        });
+        container.appendChild(grid);
+      });
+    }
+    document.addEventListener("DOMContentLoaded", renderTechSkills);
+  </script>
+
+  <!-- Email Copy + Formspree Submission -->
+  <script>
+    function copyEmail() {
+      const email = "justinvjohn25@gmail.com";
+      navigator.clipboard.writeText(email).then(() => {
+        alert("Email address copied to clipboard!");
+      }).catch(err => {
+        alert("Failed to copy email: " + err);
+      });
+    }
+
+    document.getElementById("contactForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      var form = this;
+      fetch(form.action, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(form)
+      }).then(response => {
+        if (response.ok) {
+          form.reset();
+          displayResponse("Your message has been sent successfully!", "success");
+        } else {
+          displayResponse("There was an error sending your message. Please try again later.", "error");
+        }
+      }).catch(error => {
+        displayResponse("There was an error sending your message. Please try again later.", "error");
+      });
+    });
+
+    function displayResponse(message, type) {
+      var responseDiv = document.getElementById("responseMessage");
+      responseDiv.style.display = "block";
+      responseDiv.textContent = message;
+      responseDiv.style.color = (type === "success") ? "green" : "red";
+    }
+  </script>
 </body>
 </html>
