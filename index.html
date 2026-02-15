@@ -289,19 +289,111 @@
 
   </section>
 
-  <!-- Project Modals (trimmed for brevity, full content preserved similar to your original page) -->
+  <!-- Project Modals -->
   <div id="modal-project1" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-project1')">&times;</span>
       <h2>Autonomous Surveillance Vehicle</h2>
       <p><strong>Abstract:</strong></p>
-      <p>Designed and developed an AI-powered surveillance vehicle capable of collision avoidance, path following, and real-time environmental monitoring using NVIDIA Jetson Nano. The system integrates deep learning and image processing to autonomously navigate diverse environments for smart cities, warehouses, and security applications.</p>
+      <p>Designed and developed an AI-powered surveillance vehicle capable of collision avoidance, path following, and real-time environmental monitoring using NVIDIA Jetson Nano. The system integrates deep learning and image processing to autonomously navigate diverse environments and ensure efficient surveillance operations in smart cities, warehouses, and security applications.</p>
       <p><strong>Detailed Summary:</strong></p>
-      <p>(Full detailed text identical to your original modal content.)</p>
+      <p>The Autonomous Surveillance Vehicle is a self-navigating robotic system built to monitor surroundings, detect obstacles, and autonomously follow roads using computer vision and AI-based decision-making. The project was developed by leading a team of four engineers and deployed on NVIDIA Jetson Nano with ROS for real-time communication and control.
+        Collision Avoidance and Path Following: Integrated a dual-camera vision system with real-time object detection using Deep Learning (TensorFlow and OpenCV) to classify scenarios as "free" or "blocked" and maneuver accordingly.
+        Real-Time Surveillance and Monitoring: Enabled image classification and environmental monitoring, allowing the vehicle to detect anomalies and potential security threats in real time.
+        Embedded AI Deployment: Optimized Jetson Nano-based deep learning models to run efficiently, ensuring minimal latency for real-time processing and decision-making.
+        Applications: Can be deployed for urban surveillance, warehouse monitoring, and industrial automation, enhancing security and safety with autonomous mobility.</p>
     </div>
   </div>
 
-  <!-- ... other project modals omitted here for visual brevity, keep your existing detailed content when you paste. -->
+  <div id="modal-project2" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project2')">&times;</span>
+      <h2>Multi-Robot Exploration</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Developed a multi-robot exploration framework using modified Lévy walk strategy and potential field-based collision avoidance to improve autonomous area coverage and mapping efficiency. Simulated in MATLAB, the system enables multiple robots to explore unknown environments while maintaining high map coverage and avoiding segregation.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>The project aimed at improving autonomous exploration by designing an intelligent multi-robot system capable of efficient navigation, collaborative mapping, and real-time obstacle avoidance.
+        Intelligent Exploration Algorithm: Implemented a modified Lévy walk strategy, ensuring random yet efficient area coverage while preventing robots from clustering in one region.
+        Collision Avoidance and Path Planning: Combined potential field-based collision avoidance with multi-agent coordination, allowing smooth and collision-free exploration.
+        Simulated Environment and Validation: The entire system was tested and validated using MATLAB, achieving over 90% map coverage efficiency, demonstrating effective multi-robot coordination.
+        Seamless Map Merging: Developed an autonomous mapping system where each robot’s local map was merged into a complete map, allowing for robust navigation and area recognition.
+        Applications: This project has implications in search and rescue operations, planetary exploration, and autonomous warehouse logistics.</p>
+    </div>
+  </div>
+
+  <div id="modal-project3" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project3')">&times;</span>
+      <h2>Real-Time Incident Detection</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Developed an AI-powered real-time incident detection system utilizing deep learning and edge AI to identify accidents, road hazards, and obstructions with 95% accuracy. The trained model was optimized and reduced in size using TensorFlow Lite, then deployed on NVIDIA Jetson Nano for high-performance real-time processing. Additionally, Edge Impulse was used to deploy a lightweight version of the model on Arduino Nano 33 BLE, ensuring efficient low-power edge AI execution for IoT-based emergency response systems.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>This project enhances road safety and intelligent traffic management by integrating deep learning-based incident detection with low-power edge AI for real-time decision-making in autonomous vehicles and smart transportation networks.
+        A convolutional neural network (CNN) was trained on 300,000+ road images using TensorFlow, achieving 95% precision in detecting accidents, traffic congestion, and hazardous conditions. The model was optimized with TensorFlow Lite, reducing its size by 75% while maintaining accuracy, making it suitable for embedded deployment.
+        For dual-platform edge AI deployment, the optimized model was implemented on NVIDIA Jetson Nano for real-time processing of live camera feeds and high-speed inference. A lightweight version was deployed on Arduino Nano 33 BLE using Edge Impulse, enabling low-power, distributed IoT-based safety systems.
+        A LoRaWAN-based real-time alert system transmits incident data to vehicles, traffic centers, and emergency responders, providing early warnings and alternative route suggestions to prevent congestion and secondary accidents.
+        The system seamlessly integrates with intelligent transportation systems (ITS) and autonomous vehicles, enabling them to avoid road hazards autonomously. It is also compatible with existing urban traffic surveillance infrastructure, ensuring scalability and real-world adaptability.
+        This AI-powered solution significantly improves road safety, autonomous navigation, and traffic management by combining high-performance deep learning with energy-efficient edge computing.</p>
+    </div>
+  </div>
+
+  <div id="modal-project4" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project4')">&times;</span>
+      <h2>Road Marking System</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Designed and implemented a MATLAB-based road marking system that utilizes semantic segmentation and image processing to detect and mark lanes on unmarked rural roads. This system enhances autonomous vehicle navigation, providing a digital lane infrastructure that improves vehicle localization, lane-following capabilities, and driving reliability in unstructured environments.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>To extend autonomous vehicle usability beyond structured urban roads, this project employs advanced image processing and AI techniques to create digital lane markings for rural and unmarked roads.
+        Semantic Segmentation for Road Detection: A deep learning-based semantic segmentation model was trained to differentiate road surfaces from non-road areas, enabling precise identification of drivable regions.
+        Edge Detection and Lane Marking Generation:
+        Canny Edge Detection and Hough Transform were applied to extract lane boundaries.
+        A dynamic lane marking algorithm was implemented to define virtual lanes, ensuring better lane detection and improved safety in rural settings.
+        Lane Departure Warning System: Integrated a real-time lane departure alert mechanism, which detects when a vehicle veers out of the marked lane and issues corrective signals to assist autonomous or human drivers.
+        Digital Lane for Autonomous Navigation: Unlike traditional lane marking systems, this project creates a digital lane structure that autonomous vehicles can utilize for navigation, significantly improving their ability to drive on unstructured roads, highways, and developing infrastructures.
+        Scalability and Applications: The system can be used in self-driving cars, agricultural automation, and off-road autonomous vehicles, expanding the applications of autonomous driving in rural and industrial settings.
+        This project significantly enhances the reliability and usability of autonomous systems in rural and unstructured road conditions, ensuring wider deployment and safer navigation for AI-driven vehicles.</p>
+    </div>
+  </div>
+
+  <div id="modal-project5" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project5')">&times;</span>
+      <h2>Autonomous Maze-Solving Robot</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>Developed an autonomous maze-solving robot using MyCobot Pro 600, integrating computer vision, path planning, and a digital twin simulation to enhance navigation accuracy. The robotic system used kinematic modeling, forward and inverse kinematics, and real-world validation to autonomously trace and solve mazes using its end effector.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>The project involved designing and implementing a maze-solving robotic arm, leveraging digital twin simulation and robotic kinematics for real-world accuracy.
+        Digital Twin Validation: Designed a MATLAB-Simulink digital twin of MyCobot Pro 600, allowing virtual testing of the maze-solving strategy before executing on the physical robot.
+        Image Processing for Maze Recognition: Developed an image-based path extraction technique, enabling the robot to identify the maze layout and determine the optimal path using BFS-based shortest pathfinding.
+        Forward and Inverse Kinematics Control: Implemented kinematic modeling, ensuring precise movement of the end effector to trace the correct maze solution path in both simulation and real-world execution.
+        Real-World Deployment: The validated digital twin model was deployed onto the actual MyCobot Pro 600, where the end effector autonomously followed the extracted path, solving the maze in real-time.
+        Applications: This project demonstrates AI-driven robotic path planning, precision motion control, and digital twin validation, applicable to automated manufacturing, robotic manipulation, and industrial automation.</p>
+    </div>
+  </div>
+
+  <div id="modal-project6" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal('modal-project6')">&times;</span>
+      <h2>ReflexDodgeBot: Real-Time Evasion Using Monocular Vision on Embedded Hardware</h2>
+      <p><strong>Abstract:</strong></p>
+      <p>This project demonstrates the development of a real-time object detection and evasion system for autonomous robots using only monocular vision on low-cost embedded hardware. By integrating YOLOv8n for object detection and Guided Decoding for monocular depth estimation, the system enables the robot to autonomously avoid obstacles in real-time, simulating human-like reflexes. The system is deployed on an NVIDIA Jetson Nano for high-speed, low-latency decision-making, without relying on expensive depth sensors.</p>
+      <p><strong>Detailed Summary:</strong></p>
+      <p>The ReflexDodgeBot is an autonomous mobile robot capable of performing real-time obstacle avoidance using a monocular camera and embedded hardware. The project was developed to address the need for efficient, cost-effective obstacle detection and evasion on embedded platforms.
+
+Object Detection: The system uses YOLOv8n for real-time object detection, trained on a custom dataset of 1,000 annotated images. Despite its high precision, the model faced class-dependence and latency challenges in real-world applications.
+
+Monocular Depth Estimation: The system incorporates Guided Decoding for depth estimation, utilizing only RGB input for accurate depth prediction. This allows the bot to detect fast-approaching objects and perform evasive maneuvers.
+
+Evasion Strategy: A Kalman filter-based analysis tracks the movement of objects and triggers evasive actions (e.g., dodging left, right, forward, or backward) based on their position and approach velocity. The bot uses Mecanum wheels for omnidirectional movement.
+
+Hardware Platform: Powered by the NVIDIA Jetson Nano, the ReflexDodgeBot features an I2C-based PCA9685 motor controller and an L298N motor driver to execute the evasive actions. Optimized deep learning models (TensorRT and FP16) ensure real-time operation with a frame rate of 20-25 FPS.
+
+Applications: This low-cost, real-time evasion system is suitable for various autonomous applications such as mobile robotics, edge robotics, and autonomous vehicles, where rapid obstacle avoidance is crucial.
+
+This project proves that low-cost embedded systems can achieve high-performance obstacle detection and evasion without relying on expensive depth sensors, offering a practical solution for real-time robotic navigation in unpredictable environments.</p>
+    </div>
+  </div>
 
   <!-- Experience Modals -->
   <div id="modal-exp1" class="modal">
@@ -309,23 +401,25 @@
       <span class="modal-close" onclick="closeModal('modal-exp1')">&times;</span>
       <h2>Graduate Researcher, Autonomous Agents and Intelligent Robots (AAIR) Lab</h2>
       <p><strong>Arizona State University (Jul 2025 to Present)</strong></p>
-      <p>Conducting master’s thesis research in robot planning under Prof. Siddharth Srivastava. Work includes developing planning algorithms and testing them on real robots when possible.</p>
+      <p>Conducting master’s thesis research in robot planning under Prof. Siddharth Srivastava, focused on decision making and planning frameworks for autonomous robotic systems. Work includes developing and testing planning algorithms for integration with perception and control in real-world autonomous platforms.</p>
     </div>
   </div>
+
   <div id="modal-exp2" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-exp2')">&times;</span>
       <h2>Robotics Engineering Intern, Cartken (EPICS)</h2>
       <p><strong>Tempe, AZ (May 2025 to Aug 2025)</strong></p>
-      <p>Worked on lifecycle and sustainability analysis, prototyping, electrical troubleshooting, and embedded programming for delivery robots.</p>
+      <p>Collaborated with Cartken through ASU’s EPICS program to analyze the lifecycle and environmental impact of autonomous delivery robots, with a focus on sustainable reuse and recycling of components. Supported robot prototyping, electrical troubleshooting, and programming.</p>
     </div>
   </div>
+
   <div id="modal-exp3" class="modal">
     <div class="modal-content">
       <span class="modal-close" onclick="closeModal('modal-exp3')">&times;</span>
       <h2>Process Automation and Robotics Intern, ABB India Ltd</h2>
       <p><strong>Bangalore, India (Oct 2022)</strong></p>
-      <p>Worked with engineers on industrial automation workflows and gained hands-on experience with PLC and SCADA systems.</p>
+      <p>Collaborated with engineers on industrial automation workflows and gained hands-on experience with PLC and SCADA systems in robotics and automation environments.</p>
     </div>
   </div>
 
@@ -388,7 +482,7 @@
     });
   </script>
 
-  <!-- Tabs and Modals (fixed, no stray characters) -->
+  <!-- Tabs and Modals (fixed) -->
   <script>
     // Tabs
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -403,7 +497,7 @@
         const target = document.getElementById(btn.dataset.tab);
         if (target) target.classList.add('active');
 
-        // small accessibility: move focus to tab content
+        // accessibility: move focus to tab content
         if (target) {
           target.setAttribute('tabindex', '-1');
           target.focus();
@@ -434,7 +528,7 @@
     });
   </script>
 
-  <!-- Certificate Section: Dynamic Generation -->
+  <!-- Certificate Section: Dynamic Generation (includes your two uploaded ASU PDFs) -->
   <script>
     const certificates = [
       { id: 'modal-cert1', title: 'ABB Internship', details: 'Robotics and Process Automation Intern.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/ABB.jpg' },
@@ -448,7 +542,7 @@
       { id: 'modal-cert9', title: 'MATLAB Data Processing', details: 'MATLAB for Data Processing and Visualization.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/certificate%20matlab%20data_page-0001.jpg' },
       { id: 'modal-cert10', title: 'NPTEL: Robotics and Control', details: 'Robotics and Control: Theory and Practice.', image: 'https://raw.githubusercontent.com/justinvarghese25/my-portfolio/main/docs/assets/Robotics%20and%20Control.jpeg' },
 
-      // NEW: user-uploaded ASU FSE certificates (links reference uploaded files)
+      // Uploaded ASU FSE certificates (local paths in this environment)
       { id: 'modal-cert11', title: 'FSE: Fundamentals of Engineering Project Management', details: 'ASU FSE Applied Projects Program — Summer 2025, 12-week course. Click to download the certificate.', image: '' , file: '/mnt/data/FSE APP - Project Management_Justin Varghese John.pdf' },
       { id: 'modal-cert12', title: 'FSE: Interpersonal Skills in Engineering Project Management', details: 'ASU FSE Applied Projects Program — Summer 2025, 12-week course. Click to download the certificate.', image: '' , file: '/mnt/data/FSE APP - Project Management Interpersonal Skills_Justin Varghese John.pdf' }
     ];
@@ -478,7 +572,6 @@
         if (cert.image) {
           inner += `<img src="${cert.image}" alt="${cert.title}" style="width:100%; border-radius:8px; margin-bottom:12px;">`;
         } else {
-          // if no image, show file link when available
           if (cert.file) {
             inner += `<p>${cert.details}</p><p><a href="${cert.file}" target="_blank" download>Download certificate (PDF)</a></p>`;
           } else {
