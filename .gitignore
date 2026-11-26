@@ -1,0 +1,17 @@
+# Keep private documents outside this repository.
+*.pdf
+*.doc
+*.docx
+*.pptx
+*.xlsx
+*.zip
+*.pem
+*.key
+.env
+.env.*
+private/
+private-documents/
+node_modules/
+playwright-report/
+test-results/
+_site/
