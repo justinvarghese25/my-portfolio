@@ -81,6 +81,7 @@ let paused = reducedMotion.matches;
 let elapsed = 0;
 let lastFrame = null;
 let frameRequest = null;
+const disclosureAnimations = new Map();
 const ease = (t) => t * t * (3 - 2 * t);
 
 function elbowFor(sx, sy, x, y, a, b, bend = -1) {
@@ -154,7 +155,9 @@ function draw(seconds) {
 function animate(timestamp) {
   frameRequest = null;
   if (paused || document.hidden || !visibleScenes.size) { lastFrame = null; return; }
-  if (lastFrame !== null) elapsed += Math.min(timestamp - lastFrame, 64) / 1000;
+  // Cap SVG drawing to about 30 fps; native scrolling and UI transitions remain smooth.
+  if (lastFrame !== null && timestamp-lastFrame < 32.8) { frameRequest=requestAnimationFrame(animate); return; }
+  if (lastFrame !== null) elapsed += Math.min(timestamp - lastFrame, 100) / 1000;
   lastFrame = timestamp;
   draw(elapsed);
   frameRequest = requestAnimationFrame(animate);
@@ -167,6 +170,7 @@ function syncMotion() {
   motionButton.setAttribute('aria-pressed', String(paused));
   motionButton.innerHTML = paused ? '<span aria-hidden="true">▷</span> Play motion' : '<span aria-hidden="true">Ⅱ</span> Pause motion';
   if (paused && frameRequest !== null) { cancelAnimationFrame(frameRequest); frameRequest = null; }
+  if (paused) for (const state of disclosureAnimations.values()) state.animation.finish();
   lastFrame = null;
   startMotion();
 }
@@ -232,19 +236,22 @@ document.querySelectorAll('[data-contact-topic]').forEach(link => {
   });
 });
 
-// Brief, one-time entrance transitions. Content is never hidden before JavaScript loads.
+// Scroll entrances are staggered within each group; all content stays visible without JS.
 if ('IntersectionObserver' in window) {
   const revealObserver = new IntersectionObserver(entries => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
       if (!reducedMotion.matches && !paused) entry.target.animate(
-        [{opacity:.25, transform:'translateY(16px)'},{opacity:1, transform:'translateY(0)'}],
-        {duration:480, easing:'cubic-bezier(.2,.7,.2,1)'}
+        [{opacity:.15, transform:'translateY(28px) scale(.985)'},{opacity:1, transform:'translateY(0) scale(1)'}],
+        {duration:650, delay:Number(entry.target.dataset.revealDelay||0), easing:'cubic-bezier(.16,1,.3,1)'}
       );
       revealObserver.unobserve(entry.target);
     }
   }, {threshold:.12});
-  document.querySelectorAll('.section-heading,.research-overview,.contribution-grid article,.project-card,.timeline article,.about-grid,.credential-grid article').forEach(element => revealObserver.observe(element));
+  document.querySelectorAll('.contribution-grid,.project-grid,.credential-grid,.skill-categories').forEach(group=>{
+    [...group.children].forEach((element,index)=>{element.dataset.revealDelay=String((index%3)*70);});
+  });
+  document.querySelectorAll('.section-heading,.research-overview,.research-feature-metrics>div,.contribution-grid article,.project-card,.timeline article,.about-grid,.credential-grid article,.skill-categories article').forEach(element => revealObserver.observe(element));
 }
 document.querySelectorAll('details').forEach(detail => detail.addEventListener('toggle', () => {
   const content = detail.querySelector('.project-detail,.research-details');
@@ -253,3 +260,70 @@ document.querySelectorAll('details').forEach(detail => detail.addEventListener('
     {duration:220,easing:'ease-out'}
   );
 }));
+
+// Native <details> remains the fallback. Animate only a user-triggered expansion.
+document.querySelectorAll('.project-card details,.research-disclosure').forEach(detail=>{
+  const summary=detail.querySelector('summary');
+  summary.addEventListener('click',event=>{
+    if(reducedMotion.matches||paused||!detail.animate)return;
+    event.preventDefault();
+    const previous=disclosureAnimations.get(detail);
+    const targetOpen=!(previous?previous.targetOpen:detail.open);
+    const fromHeight=detail.getBoundingClientRect().height;
+    if(previous)previous.animation.cancel();
+    detail.open=true;
+    const toHeight=targetOpen?detail.getBoundingClientRect().height:summary.getBoundingClientRect().height;
+    if(Math.abs(fromHeight-toHeight)<1){detail.open=targetOpen;detail.style.overflow='';disclosureAnimations.delete(detail);return;}
+    detail.style.overflow='hidden';
+    const animation=detail.animate([{height:`${fromHeight}px`},{height:`${toHeight}px`}],{duration:targetOpen?340:260,easing:'cubic-bezier(.22,.8,.2,1)'});
+    const state={animation,targetOpen};disclosureAnimations.set(detail,state);
+    animation.onfinish=()=>{
+      if(disclosureAnimations.get(detail)!==state)return;
+      detail.open=targetOpen;detail.style.overflow='';disclosureAnimations.delete(detail);
+      measureSections();scheduleScroll();
+    };
+  });
+});
+
+// A short, local ripple makes actions perceptible without introducing a dependency.
+document.addEventListener('click',event=>{
+  const control=event.target.closest('button,summary,.button');
+  if(!control||reducedMotion.matches||paused||control.disabled)return;
+  const bounds=control.getBoundingClientRect();
+  const wave=document.createElement('span');wave.className='click-wave';wave.setAttribute('aria-hidden','true');
+  const pointer=event.detail!==0;
+  wave.style.left=`${(pointer?event.clientX-bounds.left:bounds.width/2)-10}px`;
+  wave.style.top=`${(pointer?event.clientY-bounds.top:bounds.height/2)-10}px`;
+  control.append(wave);
+  const animation=wave.animate([{transform:'scale(0)',opacity:.2},{transform:`scale(${Math.max(bounds.width,bounds.height)/9})`,opacity:0}],{duration:450,easing:'ease-out'});
+  animation.onfinish=()=>wave.remove();animation.oncancel=()=>wave.remove();
+});
+
+// Progress and section context use one passive scroll listener and at most one update per frame.
+const progressFill=document.querySelector('#page-progress-fill');
+const sectionContext=document.querySelector('#current-section');
+const sectionNames={home:'Introduction',research:'Research',experience:'Experience',work:'Projects',about:'Background & skills',contact:'Let’s connect'};
+const scrollSections=[...document.querySelectorAll('main>section[id]')];
+let scrollScheduled=false;
+let sectionOffsets=[];
+function measureSections(){sectionOffsets=scrollSections.map(element=>({element,id:element.id,top:element.getBoundingClientRect().top+window.scrollY}));}
+function updateScroll(){
+  scrollScheduled=false;
+  const scrollTop=window.scrollY;
+  const range=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+  progressFill.style.transform=`scaleX(${Math.max(0,Math.min(1,scrollTop/range))})`;
+  let active=sectionOffsets[0];
+  for(const section of sectionOffsets)if(section.top<=scrollTop+window.innerHeight*.32)active=section;
+  if(active){
+    const label=sectionNames[active.id]||active.id;
+    if(sectionContext.textContent!==label)sectionContext.textContent=label;
+    document.querySelectorAll('.site-header nav a').forEach(link=>{
+      if(link.hash===`#${active.id}`)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+    });
+  }
+}
+function scheduleScroll(){if(!scrollScheduled){scrollScheduled=true;requestAnimationFrame(updateScroll);}}
+window.addEventListener('scroll',scheduleScroll,{passive:true});
+window.addEventListener('resize',()=>{measureSections();scheduleScroll();},{passive:true});
+if('ResizeObserver'in window)new ResizeObserver(()=>{measureSections();scheduleScroll();}).observe(document.querySelector('main'));
+measureSections();updateScroll();

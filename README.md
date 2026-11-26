@@ -10,7 +10,11 @@ All six original projects, their substantive descriptions, all original skill ca
 
 JavaScript adds filtering, live status announcements, optional clipboard copying, and coordinated SVG motion. Animations are conceptual explanations, not performance recordings. Motion has a global pause control, starts paused for reduced-motion preferences, and stops updating scenes outside the viewport or while the tab is hidden. Without JavaScript, illustrations remain static.
 
-`scenes.js` controls explanatory sequences for reflex evasion, local-map collection and merging, incident detection with authority alerts and traffic diversion, and road segmentation with virtual lanes. The robot-arm and surveillance scenes are coordinated in `script.js`. Each scene can be restarted. The hero provides Observe, Learn, and Plan & act views. Brief entrance and option transitions respect reduced-motion preferences.
+`scenes.js` controls explanatory sequences for reflex evasion, shared-environment mapping, incident detection with authority alerts and traffic diversion, and road segmentation with virtual lanes. The mapping scene shows three robots exploring separate regions of one continuous environment, identifying example objects, adding semantic location markers, and merging geometry and object labels into the complete map. Object-aware mapping is a capability described by the owner; the illustrated crate, table, and chair are examples, not claimed recognition results. The robot-arm and surveillance scenes are coordinated in `script.js`. Each scene can be restarted. The hero provides Observe, Learn, and Plan & act views.
+
+Scroll entrances are staggered, a reading-progress bar and section indicator track position, and capable browsers add a small scroll-linked depth effect. Prominent native disclosure controls expand smoothly and buttons provide brief ripple feedback. Reduced-motion preferences disable decorative transitions and start robot scenes paused. The native controls remain functional without JavaScript.
+
+SVG updates are capped at approximately 30 per second, run only for visible scenes, and stop while the tab is hidden. Scene element/path references are cached, unchanged text and attributes are not rewritten, and map opacity changes are quantized to limit DOM updates. Scroll work is coalesced into one animation-frame callback with section positions cached until layout changes.
 
 ## Contact form
 
@@ -44,5 +48,7 @@ Edit `index.html` for the biography, research, case studies, dates, and links. E
 The research metrics describe the supplied November 2026 thesis: three measured runs per implementation and domain, comparing complete configured pipelines. The timing differences include software and data-preparation changes; they are not isolated effects of clustering. The existing LAMP framework supplies the underlying planning approach. Degree completion remains “expected December 2026.”
 
 Learning-time reduction is calculated as `100 × (1 − revised mean / baseline mean)`: Packing 99.39% (3589.25 → 21.86 seconds), Keva 97.15% (1804.89 → 51.40 seconds), and CafeWorld 87.17% (5336.83 → 684.48 seconds). The pose-construction interface reduction is a separate metric: 19 → 6 scalar inputs, or 68.4%.
+
+The headline overall reduction, **92.94%**, is `100 × (1 − 757.74 / 10730.97)`, comparing the sums of domain mean combined learning times. It is not an arithmetic average of the three percentages or an isolated clustering effect. The public summary presents this overall result and the 68.4% hyperparameter reduction; per-domain results and experimental conditions are inside the research disclosure.
 
 Avoid adding unsupported performance numbers or suggesting a project has a public code repository when none is linked. The contact address and professional profile links were retained from existing portfolio materials.
