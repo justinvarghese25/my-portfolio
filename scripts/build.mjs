@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = resolve(root, '_site');
 const publicFiles = ['index.html', 'styles.css', 'script.js', 'scenes.js', 'exploration.js', '.nojekyll', 'robots.txt', 'sitemap.xml', 'assets/favicon.svg', 'assets/social-card.png'];
-const allowedMedia = new Set(['assets/favicon.svg', 'assets/social-card.png', 'docs/assets/justin.webp']);
+const allowedMedia = new Set(['assets/favicon.svg', 'assets/social-card.png']);
 
 async function audit(directory, prefix = '') {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
