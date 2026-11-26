@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = resolve(root, '_site');
-const publicFiles = ['index.html', 'styles.css', 'script.js', 'scenes.js', 'exploration.js', '.nojekyll', 'robots.txt', 'sitemap.xml', 'assets/favicon.svg', 'assets/social-card.png'];
+const publicFiles = ['index.html', 'styles.css', 'script.js', 'scenes.js', 'exploration.js', 'story.js', '.nojekyll', 'robots.txt', 'sitemap.xml', 'assets/favicon.svg', 'assets/social-card.png'];
 const allowedMedia = new Set(['assets/favicon.svg', 'assets/social-card.png']);
 
 async function audit(directory, prefix = '') {
@@ -26,8 +26,9 @@ for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
   if (reference.startsWith('#')) {
     if (!html.includes(`id="${reference.slice(1)}"`)) throw new Error(`Missing anchor: ${reference}`);
   } else if (!/^(https:|mailto:)/.test(reference)) {
-    if (!publicFiles.includes(reference)) throw new Error(`Asset missing from publication allowlist: ${reference}`);
-    await readFile(resolve(root, reference));
+    const fileReference=reference.split(/[?#]/,1)[0];
+    if (!publicFiles.includes(fileReference)) throw new Error(`Asset missing from publication allowlist: ${reference}`);
+    await readFile(resolve(root, fileReference));
   }
 }
 // Remove only this fixed build-output directory inside the repository.

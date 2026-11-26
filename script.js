@@ -12,7 +12,7 @@ if (filterGroup) {
     projectCards.forEach((card) => { card.hidden = button.dataset.filter !== 'all' && card.dataset.category !== button.dataset.filter; });
     const count = projectCards.filter((card) => !card.hidden).length;
     filterStatus.textContent = `${count} projects shown. Filter: ${button.textContent}.`;
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !document.documentElement.classList.contains('motion-paused')) {
+    if (!document.documentElement.classList.contains('motion-paused')) {
       projectCards.filter(card => !card.hidden).forEach((card, index) => card.animate(
         [{opacity: .35, transform: 'translateY(10px)'}, {opacity: 1, transform: 'translateY(0)'}],
         {duration: 280, delay: index * 35, easing: 'cubic-bezier(.2,.7,.2,1)'}
@@ -75,9 +75,12 @@ if (contactForm) {
 // Illustrative motion is shared by all scenes and can be paused independently of scrolling.
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const motionButton = document.querySelector('#motion-toggle');
-const scenes = [...document.querySelectorAll('.robot-scene, .project-art svg')];
+const scenes = [...document.querySelectorAll('.intro-scene, .robot-scene, .project-art svg')];
 const visibleScenes = new Set(scenes);
-let paused = reducedMotion.matches;
+let storedMotion='';try{storedMotion=localStorage.getItem('portfolio-motion')||'';}catch{}
+let motionOptIn=storedMotion==='full';
+let paused=storedMotion==='reduced'||(!motionOptIn&&reducedMotion.matches);
+const scrollMotions=new Map();
 let isScrolling=false;
 let scrollIdleTimer=null;
 const frameInterval=(matchMedia('(pointer:coarse)').matches||(navigator.hardwareConcurrency||8)<=4||navigator.connection?.saveData)?32.8:16.1;
@@ -93,7 +96,7 @@ function elbowFor(sx, sy, x, y, a, b, bend = -1) {
   const angle = Math.atan2(dy, dx) + bend * Math.acos(Math.max(-1, Math.min(1, (distance * distance + a * a - b * b) / (2 * distance * a))));
   return [sx + a * Math.cos(angle), sy + a * Math.sin(angle)];
 }
-function positionHero(seconds) {
+function positionHero(seconds,override=null) {
   const cycle = (seconds / 17) % 1;
   const returning = cycle >= .5;
   const t = (cycle * 2) % 1;
@@ -107,9 +110,9 @@ function positionHero(seconds) {
   const index = Math.max(0, frames.findIndex((f) => f[0] > t) - 1);
   const from = frames[index], to = frames[index + 1];
   const p = ease((t - from[0]) / (to[0] - from[0]));
-  const x = from[1] + (to[1] - from[1]) * p;
-  const y = from[2] + (to[2] - from[2]) * p;
-  const grip = from[3] + (to[3] - from[3]) * p;
+  const x = override?.x ?? from[1] + (to[1] - from[1]) * p;
+  const y = override?.y ?? from[2] + (to[2] - from[2]) * p;
+  const grip = override?.grip ?? from[3] + (to[3] - from[3]) * p;
   const [ex, ey] = elbowFor(178, 280, x, y, 140, 150);
   const d = `M178 280L${ex} ${ey}L${x} ${y}`;
   document.querySelectorAll('.arm-back,.arm-metal,.arm-inset').forEach((path) => path.setAttribute('d', d));
@@ -117,8 +120,9 @@ function positionHero(seconds) {
   document.querySelector('#wrist').setAttribute('transform', `translate(${x} ${y})`);
   document.querySelector('#jaw-left').setAttribute('transform', `translate(${grip * 5} 0)`);
   document.querySelector('#jaw-right').setAttribute('transform', `translate(${-grip * 5} 0)`);
-  const object = t < .36 ? source : t < .765 ? [x, y + 28] : destination;
+  const object = override ? [390,283] : t < .36 ? source : t < .765 ? [x, y + 28] : destination;
   document.querySelector('#carried-object').setAttribute('transform', `translate(${object[0]} ${object[1]})`);
+  document.querySelector('#research-relation-badge').setAttribute('transform',`translate(${object[0]-32} ${object[1]+24})`);
   const stage = t < .32 ? 'REACH' : t < .48 ? 'GRASP + LIFT' : t < .73 ? 'TRANSFER' : 'PLACE + RELEASE';
   const mode=document.querySelector('.hero-visual').dataset.heroMode;
   document.querySelector('#robot-stage').textContent = mode==='observe'?'OBSERVE DEMONSTRATIONS':mode==='learn'?'LEARN RECURRING RELATIONSHIPS':`${returning ? 'RETURN' : 'TRANSFER'} / ${stage}`;
@@ -133,7 +137,8 @@ const mazeLength = maze.getTotalLength();
 const loopOffsets = {maze:0, surveillance:0};
 document.querySelector('#maze-progress').setAttribute('stroke-dasharray', `${mazeLength} ${mazeLength}`);
 function draw(seconds) {
-  if (visibleScenes.has(document.querySelector('.robot-scene'))) positionHero(document.querySelector('.hero-visual').dataset.heroMode === 'plan' ? seconds : 0);
+  window.portfolioStory.draw(seconds,visibleScenes);
+  if(visibleScenes.has(document.querySelector('.robot-scene'))){const state=window.portfolioStory.robotState();positionHero(state.time,state.override);}
   for (const {element,path,length,scene,phase} of routes) {
     if (!visibleScenes.has(scene)) continue;
     const t = ((Math.max(0, seconds-loopOffsets.surveillance) / 15) + phase) % 1;
@@ -171,6 +176,10 @@ function startMotion() {
 }
 function syncMotion() {
   document.documentElement.classList.toggle('motion-paused', paused);
+  document.documentElement.classList.toggle('allow-motion',motionOptIn&&!paused);
+  const introToggle=document.querySelector('#intro-motion-toggle');introToggle.hidden=false;introToggle.textContent=paused?'Play animations':'Pause animations';introToggle.setAttribute('aria-pressed',String(paused));
+  document.querySelector('#motion-state-note').textContent=paused?(storedMotion!=='reduced'&&reducedMotion.matches&&!motionOptIn?'Your device requests reduced motion. Play to enable animations.':'Animations paused. Play to enable scene and scroll motion.'):'Automatic animation · pause anytime';
+  if(paused)for(const animation of scrollMotions.values())animation.finish();
   motionButton.setAttribute('aria-pressed', String(paused));
   motionButton.innerHTML = paused ? '<span aria-hidden="true">▷</span> Play motion' : '<span aria-hidden="true">Ⅱ</span> Pause motion';
   if (paused && frameRequest !== null) { cancelAnimationFrame(frameRequest); frameRequest = null; }
@@ -180,13 +189,14 @@ function syncMotion() {
   startMotion();
 }
 motionButton.hidden = false;
-motionButton.addEventListener('click', () => { paused = !paused; syncMotion(); });
-reducedMotion.addEventListener('change', () => { paused = reducedMotion.matches; syncMotion(); });
+motionButton.addEventListener('click', () => { paused = !paused; motionOptIn=!paused;storedMotion=paused?'reduced':'full';try{localStorage.setItem('portfolio-motion',storedMotion);}catch{}syncMotion(); });
+ document.querySelector('#intro-motion-toggle').addEventListener('click',()=>motionButton.click());
+reducedMotion.addEventListener('change', () => { if(!storedMotion)paused=reducedMotion.matches;syncMotion(); });
 document.addEventListener('visibilitychange', () => { lastFrame = null; startMotion(); });
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting) { visibleScenes.add(entry.target); window.portfolioScenes.activate(entry.target, elapsed); }
+      if (entry.isIntersecting) { visibleScenes.add(entry.target); window.portfolioScenes.activate(entry.target, elapsed);window.portfolioStory.activate(entry.target,elapsed); }
       else visibleScenes.delete(entry.target);
       entry.target.classList.toggle('scene-offscreen', !entry.isIntersecting);
     }
@@ -205,21 +215,7 @@ document.querySelectorAll('[data-replay]').forEach(button => {
   });
 });
 
-const heroModes = document.querySelector('.hero-modes');
-const heroCaptions = {
-  observe: 'Observe — compare relative configurations across demonstrations.',
-  learn: 'Learn — group recurring configurations into relational regions.',
-  plan: 'Plan & act — use learned models to guide robot actions.'
-};
-heroModes.hidden = false;
-heroModes.addEventListener('click', event => {
-  const button = event.target.closest('button[data-hero-mode]');
-  if (!button) return;
-  document.querySelector('.hero-visual').dataset.heroMode = button.dataset.heroMode;
-  heroModes.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-  document.querySelector('#hero-mode-caption').textContent = heroCaptions[button.dataset.heroMode];
-  positionHero(button.dataset.heroMode === 'plan' ? elapsed : 0);
-});
+const restartStory=document.querySelector('#restart-research-story');restartStory.hidden=false;restartStory.addEventListener('click',()=>{window.portfolioStory.restart(elapsed);const state=window.portfolioStory.robotState();positionHero(state.time,state.override);});
 
 // Requests stay on the site and use the existing contact form rather than an email-app dependency.
 document.querySelectorAll('[data-contact-topic]').forEach(link => {
@@ -236,28 +232,24 @@ document.querySelectorAll('[data-contact-topic]').forEach(link => {
     }
     document.querySelector('#form-status').textContent = 'Add your name and email, complete your message, then press Send message.';
     document.querySelector('#form-status').removeAttribute('data-state');
-    contactForm.scrollIntoView({behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start'});
+    contactForm.scrollIntoView({behavior: paused ? 'instant' : 'smooth', block: 'start'});
     contactForm.querySelector('[name="name"]').focus({preventScroll:true});
   });
 });
 
-// Scroll entrances are staggered within each group; all content stays visible without JS.
-if ('IntersectionObserver' in window) {
-  const revealObserver = new IntersectionObserver(entries => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      if (!reducedMotion.matches && !paused && !CSS.supports('animation-timeline','view()')) entry.target.animate(
-        [{opacity:.35, transform:'translateY(14px)'},{opacity:1, transform:'translateY(0)'}],
-        {duration:420, delay:Number(entry.target.dataset.revealDelay||0), easing:'cubic-bezier(.16,1,.3,1)'}
-      );
-      revealObserver.unobserve(entry.target);
-    }
-  }, {threshold:.12});
-  document.querySelectorAll('.contribution-grid,.project-grid,.credential-grid,.skill-categories').forEach(group=>{
-    [...group.children].forEach((element,index)=>{element.dataset.revealDelay=String((index%3)*70);});
-  });
-  document.querySelectorAll('.section-heading,.research-overview,.research-feature-metrics,.contribution-grid article,.project-body,.timeline article,.about-story,.skill-categories article').forEach(element => { element.classList.add('scroll-reveal'); revealObserver.observe(element); });
+// Cross-browser scroll entrances use one observer, with fully readable static fallbacks.
+if('IntersectionObserver'in window){
+ const observer=new IntersectionObserver(entries=>{
+  for(const entry of entries){
+   const previous=scrollMotions.get(entry.target);if(previous){previous.cancel();scrollMotions.delete(entry.target);}
+   if(!entry.isIntersecting||paused||!entry.target.animate)continue;
+   const animation=entry.target.animate([{opacity:.12,transform:'translateY(34px)'},{opacity:1,transform:'translateY(0)'}],{duration:650,easing:'cubic-bezier(.16,1,.3,1)'});
+   scrollMotions.set(entry.target,animation);animation.onfinish=()=>{if(scrollMotions.get(entry.target)===animation)scrollMotions.delete(entry.target);};
+  }
+ },{threshold:.12});
+ document.querySelectorAll('.section-heading,.research-overview,.research-feature-metrics,.contribution-grid article,.research-player-heading,.project-body>h3,.project-body>p:not(.eyebrow),.timeline article,.about-story,.skill-categories article').forEach(element=>{element.classList.add('scroll-reveal');observer.observe(element);});
 }
+
 // Native disclosures remain a no-JavaScript fallback; enhanced controls open a focused case study.
 const caseDialog=document.querySelector('#case-dialog');
 const caseBody=document.querySelector('#case-dialog-body');
@@ -269,7 +261,7 @@ function closeCase(){
   dialogClosing=true;
   if(dialogAnimation)dialogAnimation.cancel();
   const finish=()=>{caseDialog.close();dialogClosing=false;};
-  if(reducedMotion.matches||paused){finish();return;}
+  if(paused){finish();return;}
   dialogAnimation=caseDialog.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(12px)'}],{duration:160,easing:'ease-in'});
   dialogAnimation.onfinish=finish;
 }
@@ -291,7 +283,7 @@ if(caseDialog&&typeof caseDialog.showModal==='function'){
       for(const node of nodes){const clone=node.cloneNode(true);clone.removeAttribute('id');clone.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));caseBody.append(clone);}
       document.documentElement.classList.add('case-open');caseDialog.showModal();caseBody.scrollTop=0;
       document.querySelector('#case-dialog-close').focus({preventScroll:true});
-      if(!reducedMotion.matches&&!paused)dialogAnimation=caseDialog.animate([{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'cubic-bezier(.2,.8,.2,1)'});
+      if(!paused)dialogAnimation=caseDialog.animate([{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'cubic-bezier(.2,.8,.2,1)'});
     });
   });
   document.querySelector('#case-dialog-close').addEventListener('click',closeCase);
@@ -303,7 +295,7 @@ if(caseDialog&&typeof caseDialog.showModal==='function'){
 // A short, local ripple makes actions perceptible without introducing a dependency.
 document.addEventListener('click',event=>{
   const control=event.target.closest('button,summary,.button');
-  if(!control||reducedMotion.matches||paused||control.disabled)return;
+  if(!control||paused||control.disabled)return;
   const bounds=control.getBoundingClientRect();
   const wave=document.createElement('span');wave.className='click-wave';wave.setAttribute('aria-hidden','true');
   const pointer=event.detail!==0;
@@ -359,5 +351,5 @@ if('ResizeObserver'in window)new ResizeObserver(()=>{measureSections();scheduleS
 measureSections();updateScroll();
 
 const compactHero=matchMedia('(max-width:600px)');
-function sizeHero(){document.querySelector('.robot-scene').setAttribute('viewBox',compactHero.matches?'240 0 720 540':'0 0 1200 540');}
+function sizeHero(){document.querySelector('.robot-scene').setAttribute('viewBox','240 0 720 540');document.querySelector('#intro-scene').setAttribute('viewBox',compactHero.matches?'80 35 840 330':'0 0 1000 400');}
 compactHero.addEventListener('change',sizeHero);sizeHero();
