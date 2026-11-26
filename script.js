@@ -84,7 +84,7 @@ const frameInterval=(matchMedia('(pointer:coarse)').matches||(navigator.hardware
 let elapsed = 0;
 let lastFrame = null;
 let frameRequest = null;
-const disclosureAnimations = new Map();
+
 const ease = (t) => t * t * (3 - 2 * t);
 
 function elbowFor(sx, sy, x, y, a, b, bend = -1) {
@@ -120,7 +120,8 @@ function positionHero(seconds) {
   const object = t < .36 ? source : t < .765 ? [x, y + 28] : destination;
   document.querySelector('#carried-object').setAttribute('transform', `translate(${object[0]} ${object[1]})`);
   const stage = t < .32 ? 'REACH' : t < .48 ? 'GRASP + LIFT' : t < .73 ? 'TRANSFER' : 'PLACE + RELEASE';
-  document.querySelector('#robot-stage').textContent = `${returning ? 'RETURN' : 'TRANSFER'} / ${stage}`;
+  const mode=document.querySelector('.hero-visual').dataset.heroMode;
+  document.querySelector('#robot-stage').textContent = mode==='observe'?'OBSERVE DEMONSTRATIONS':mode==='learn'?'LEARN RECURRING RELATIONSHIPS':`${returning ? 'RETURN' : 'TRANSFER'} / ${stage}`;
 }
 
 const routes = [...document.querySelectorAll('.route-traveler')].map((element) => {
@@ -157,7 +158,7 @@ function draw(seconds) {
 }
 function animate(timestamp) {
   frameRequest = null;
-  if (paused || isScrolling || document.hidden || !visibleScenes.size) { lastFrame = null; return; }
+  if (paused || isScrolling || document.hidden || document.documentElement.classList.contains('case-open') || !visibleScenes.size) { lastFrame = null; return; }
   // Use the display cadence on desktop and a lower budget on touch/low-power devices.
   if (lastFrame !== null && timestamp-lastFrame < frameInterval) { frameRequest=requestAnimationFrame(animate); return; }
   if (lastFrame !== null) elapsed += Math.min(timestamp - lastFrame, 100) / 1000;
@@ -166,14 +167,15 @@ function animate(timestamp) {
   frameRequest = requestAnimationFrame(animate);
 }
 function startMotion() {
-  if (!paused && !isScrolling && !document.hidden && visibleScenes.size && frameRequest === null) frameRequest = requestAnimationFrame(animate);
+  if (!paused && !isScrolling && !document.hidden && !document.documentElement.classList.contains('case-open') && visibleScenes.size && frameRequest === null) frameRequest = requestAnimationFrame(animate);
 }
 function syncMotion() {
   document.documentElement.classList.toggle('motion-paused', paused);
   motionButton.setAttribute('aria-pressed', String(paused));
   motionButton.innerHTML = paused ? '<span aria-hidden="true">▷</span> Play motion' : '<span aria-hidden="true">Ⅱ</span> Pause motion';
   if (paused && frameRequest !== null) { cancelAnimationFrame(frameRequest); frameRequest = null; }
-  if (paused) for (const state of disclosureAnimations.values()) state.animation.finish();
+  if (paused) document.querySelector('#case-dialog')?.getAnimations().forEach(animation=>animation.finish());
+
   lastFrame = null;
   startMotion();
 }
@@ -244,7 +246,7 @@ if ('IntersectionObserver' in window) {
   const revealObserver = new IntersectionObserver(entries => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
-      if (!reducedMotion.matches && !paused && !isScrolling) entry.target.animate(
+      if (!reducedMotion.matches && !paused && !CSS.supports('animation-timeline','view()')) entry.target.animate(
         [{opacity:.35, transform:'translateY(14px)'},{opacity:1, transform:'translateY(0)'}],
         {duration:420, delay:Number(entry.target.dataset.revealDelay||0), easing:'cubic-bezier(.16,1,.3,1)'}
       );
@@ -254,39 +256,49 @@ if ('IntersectionObserver' in window) {
   document.querySelectorAll('.contribution-grid,.project-grid,.credential-grid,.skill-categories').forEach(group=>{
     [...group.children].forEach((element,index)=>{element.dataset.revealDelay=String((index%3)*70);});
   });
-  document.querySelectorAll('.section-heading,.research-overview,.contribution-grid article,.project-body,.timeline article,.about-copy,.skill-categories article').forEach(element => revealObserver.observe(element));
+  document.querySelectorAll('.section-heading,.research-overview,.research-feature-metrics,.contribution-grid article,.project-body,.timeline article,.about-story,.skill-categories article').forEach(element => { element.classList.add('scroll-reveal'); revealObserver.observe(element); });
 }
-document.querySelectorAll('details').forEach(detail => detail.addEventListener('toggle', () => {
-  const content = detail.querySelector('.project-detail,.research-details');
-  if (detail.open && content && !reducedMotion.matches && !paused) content.animate(
-    [{opacity:0, transform:'translateY(-5px)'},{opacity:1, transform:'translateY(0)'}],
-    {duration:220,easing:'ease-out'}
-  );
-}));
-
-// Native <details> remains the fallback. Animate only a user-triggered expansion.
-document.querySelectorAll('.project-card details,.research-disclosure').forEach(detail=>{
-  const summary=detail.querySelector('summary');
-  summary.addEventListener('click',event=>{
-    if(reducedMotion.matches||paused||!detail.animate)return;
-    event.preventDefault();
-    const previous=disclosureAnimations.get(detail);
-    const targetOpen=!(previous?previous.targetOpen:detail.open);
-    const fromHeight=detail.getBoundingClientRect().height;
-    if(previous)previous.animation.cancel();
-    detail.open=true;
-    const toHeight=targetOpen?detail.getBoundingClientRect().height:summary.getBoundingClientRect().height;
-    if(Math.abs(fromHeight-toHeight)<1){detail.open=targetOpen;detail.style.overflow='';disclosureAnimations.delete(detail);return;}
-    detail.style.overflow='hidden';
-    const animation=detail.animate([{height:`${fromHeight}px`},{height:`${toHeight}px`}],{duration:targetOpen?340:260,easing:'cubic-bezier(.22,.8,.2,1)'});
-    const state={animation,targetOpen};disclosureAnimations.set(detail,state);
-    animation.onfinish=()=>{
-      if(disclosureAnimations.get(detail)!==state)return;
-      detail.open=targetOpen;detail.style.overflow='';disclosureAnimations.delete(detail);
-      measureSections();scheduleScroll();
-    };
+// Native disclosures remain a no-JavaScript fallback; enhanced controls open a focused case study.
+const caseDialog=document.querySelector('#case-dialog');
+const caseBody=document.querySelector('#case-dialog-body');
+let caseTrigger=null;
+let dialogAnimation=null;
+let dialogClosing=false;
+function closeCase(){
+  if(!caseDialog.open||dialogClosing)return;
+  dialogClosing=true;
+  if(dialogAnimation)dialogAnimation.cancel();
+  const finish=()=>{caseDialog.close();dialogClosing=false;};
+  if(reducedMotion.matches||paused){finish();return;}
+  dialogAnimation=caseDialog.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(12px)'}],{duration:160,easing:'ease-in'});
+  dialogAnimation.onfinish=finish;
+}
+if(caseDialog&&typeof caseDialog.showModal==='function'){
+  document.querySelectorAll('.project-card details,.research-disclosure').forEach(detail=>{
+    const summary=detail.querySelector('summary');
+    const button=document.createElement('button');
+    button.type='button';button.className=detail.classList.contains('research-disclosure')?'detail-trigger research-trigger':'detail-trigger project-trigger';
+    button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls','case-dialog');
+    for(const child of summary.childNodes)button.append(child.cloneNode(true));
+    detail.before(button);detail.hidden=true;
+    button.addEventListener('click',()=>{
+      if(dialogAnimation)dialogAnimation.cancel();dialogClosing=false;caseTrigger=button;
+      const research=detail.classList.contains('research-disclosure');
+      document.querySelector('#case-dialog-kind').textContent=research?'RESEARCH / FULL RESULTS':'PROJECT / CASE STUDY';
+      document.querySelector('#case-dialog-title').textContent=research?'Learning models for robot planning':detail.closest('.project-card').querySelector('h3').textContent;
+      caseBody.replaceChildren();
+      const nodes=research?[...detail.children].filter(child=>child!==summary):[detail.querySelector('.project-detail')];
+      for(const node of nodes){const clone=node.cloneNode(true);clone.removeAttribute('id');clone.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));caseBody.append(clone);}
+      document.documentElement.classList.add('case-open');caseDialog.showModal();caseBody.scrollTop=0;
+      document.querySelector('#case-dialog-close').focus({preventScroll:true});
+      if(!reducedMotion.matches&&!paused)dialogAnimation=caseDialog.animate([{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'translateY(0)'}],{duration:240,easing:'cubic-bezier(.2,.8,.2,1)'});
+    });
   });
-});
+  document.querySelector('#case-dialog-close').addEventListener('click',closeCase);
+  caseDialog.addEventListener('cancel',event=>{event.preventDefault();closeCase();});
+  caseDialog.addEventListener('click',event=>{if(event.target!==caseDialog)return;const rect=caseDialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeCase();});
+  caseDialog.addEventListener('close',()=>{document.documentElement.classList.remove('case-open');if(caseTrigger?.isConnected)caseTrigger.focus({preventScroll:true});lastFrame=null;startMotion();});
+}
 
 // A short, local ripple makes actions perceptible without introducing a dependency.
 document.addEventListener('click',event=>{
