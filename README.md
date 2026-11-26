@@ -14,7 +14,15 @@ JavaScript adds filtering, live status announcements, optional clipboard copying
 
 Scroll entrances are staggered, a reading-progress bar and section indicator track position, and capable browsers add a small scroll-linked depth effect. Prominent native disclosure controls expand smoothly and buttons provide brief ripple feedback. Reduced-motion preferences disable decorative transitions and start robot scenes paused. The native controls remain functional without JavaScript.
 
-SVG updates are capped at approximately 30 per second, run only for visible scenes, and stop while the tab is hidden. Scene element/path references are cached, unchanged text and attributes are not rewritten, and map opacity changes are quantized to limit DOM updates. Scroll work is coalesced into one animation-frame callback with section positions cached until layout changes.
+SVG drawing uses an adaptive budget: display cadence on desktop and a lower rate for touch, low-core-count, or data-saving devices. Simulation updates stop during fast scrolling, resume 140ms after scrolling settles, and stop for hidden tabs or offscreen scenes. Simulation time is preserved across pauses. Scene element/path references are cached, unchanged text and attributes are not rewritten, and map opacity changes are quantized to limit DOM updates. Scroll work is coalesced into one animation-frame callback with section positions and page height cached until layout changes. Navigation attributes update only when the active section changes. Large diagram/card scaling effects were removed; brief entrances apply to text containers instead.
+
+The introduction is a centered, full-width composition with an interactive robot stage on the same background, rather than a separate side panel. Its desktop-to-phone framing changes without altering the robot geometry. The scroll-linked stage movement uses transform-only native CSS timelines where supported and has a static fallback. There is no scroll hijacking, video sequence download, WebGL dependency, or animation framework.
+
+### Randomized exploration illustration
+
+`exploration.js` builds a fresh simulation using a seeded random generator. Three robots sense initially unknown regions, choose randomized reachable frontiers using only their observed occupancy maps, and move through known free cells. Sensor rays are occluded by walls; map cells and object labels appear when observed. Only the traveled path is drawn, not a precomputed future route. Observations merge after exploration. Restarting the scene or beginning a new cycle generates another run. The illustration uses randomized frontier exploration to communicate unknown-area mapping; it is not a recording or a claim that this renderer reproduces the project's modified Lévy-walk implementation.
+
+Checks cover 100 seeds for different paths, collision-free movement, and complete observable coverage, plus 10 screen/touch configurations for layout and request controls. A browser test verifies that simulation updates stop throughout continuous fast scrolling and resume afterward. Browser emulation does not guarantee identical performance on every physical device.
 
 ## Contact form
 

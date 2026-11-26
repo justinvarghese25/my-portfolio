@@ -63,47 +63,49 @@ window.portfolioScenes = (() => {
     for (let i=0;i<2;i++) set(`diverted-car-${i}`, 'opacity', between(t, 0, .05) * fade);
     stage('incident', t < .22 ? '01 / Detect the road incident' : t < .44 ? '02 / Alert the authorities' : t < .63 ? '03 / Close the affected route' : '04 / Divert drivers around the blockage');
   }
-  const mapSamples = Array.from({length:3}, (_, robot) => {
-    const {path,length} = pathInfo(`local-route-${robot}`);
-    return Array.from({length:41}, (_,index) => path.getPointAtLength(length*index/40));
-  });
-  function revealPosition(robot,x,y) {
-    const samples=mapSamples[robot];
-    const first=samples.findIndex(point=>Math.hypot(point.x-x,point.y-y)<34);
-    if (first>=0) return Math.min(.9,first/40);
-    let best=Infinity,nearest=0;
-    samples.forEach((point,index)=>{const distance=Math.hypot(point.x-x,point.y-y);if(distance<best){best=distance;nearest=index;}});
-    return Math.min(.9,nearest/40);
+  let mapRun, mapCycle=0;
+  const cells=[...document.querySelectorAll('.local-map-cell,.merged-map-cell')].map(element=>({element,robot:Number(element.dataset.robot),index:Number(element.dataset.cell),local:element.classList.contains('local-map-cell'),last:-1}));
+  function newMapRun(seed){
+    mapRun=window.createExploration(seed);
+    mapRun.robots.forEach((robot,index)=>{
+      const points=robot.frames.map(point=>({x:33+point.c*14,y:70+point.r*12}));
+      robot.points=points;
+      set('local-route-'+index,'d',points.map((p,n)=>(n?'L':'M')+p.x+' '+p.y).join(''));
+      set('local-route-'+index,'pathLength',1);
+      set('local-route-'+index,'stroke-dasharray','1 1');
+      paths.delete('local-route-'+index);
+    });
   }
-  const cells = [...document.querySelectorAll('.local-map-cell,.merged-map-cell')].map(element=>{
-    const robot=Number(element.dataset.robot), local=element.classList.contains('local-map-cell');
-    return {element,robot,local,rank:local?revealPosition(robot,Number(element.dataset.x),Number(element.dataset.y)):Number(element.dataset.cell)/95,last:-1};
-  });
-  const objectPositions=[[89,142],[200,130],[313,151]];
-  const objectRanks=objectPositions.map(([x,y],robot)=>revealPosition(robot,x,y));
-  function mapping(seconds) {
-    const t = (seconds % 16) / 16;
-    const fade = 1 - between(t, .965, 1);
-    const progressByRobot=[];
-    for (let i=0;i<3;i++) {
-      const progress = between(t, .025 + i*.025, .59 + i*.025);
-      progressByRobot.push(progress);
-      follow(`mapping-robot-${i}`, `local-route-${i}`, progress, 0, false);
-      const discovered=between(progress,Math.max(0,objectRanks[i]-.04),Math.min(.99,objectRanks[i]+.09))*fade;
-      set(`map-object-${i}`,'opacity',.15+.85*discovered);
-      set(`object-marker-${i}`,'opacity',discovered);
-      set(`merged-object-${i}`,'opacity',between(t,.77+i*.035,.84+i*.025)*fade);
-    }
-    for (const cell of cells) {
-      const progress=cell.local?progressByRobot[cell.robot]:between(t,.66+cell.robot*.035,.82+cell.robot*.035);
-      const revealed=between(progress,Math.max(0,cell.rank*.9-.04),Math.min(.98,cell.rank*.9+.07))*fade;
-      const opacity=Math.round((.05+.95*revealed)*40)/40;
+  newMapRun();
+  function mapping(seconds){
+    const cycle=Math.floor(seconds/32),t=(seconds%32)/32;
+    if(cycle!==mapCycle){mapCycle=cycle;newMapRun();}
+    const fade=1-between(t,.985,1);
+    const stepPositions=mapRun.robots.map((robot,index)=>between(t,.025+index*.015,.80+index*.01)*(robot.frames.length-1));
+    mapRun.robots.forEach((robot,index)=>{
+      const step=stepPositions[index],lower=Math.min(robot.points.length-1,Math.floor(step)),upper=Math.min(robot.points.length-1,lower+1);
+      const a=robot.points[lower],b=robot.points[upper],p=smooth(step-lower);
+      set('mapping-robot-'+index,'transform','translate('+(a.x+(b.x-a.x)*p)+' '+(a.y+(b.y-a.y)*p)+')');
+      set('local-route-'+index,'stroke-dashoffset',1-step/(robot.frames.length-1));
+      const objectIndex=[52,44,60][index];
+      const firstSeen=robot.discoveredAt[objectIndex];
+      const detected=firstSeen<0?0:(firstSeen===0?1:between(step,firstSeen-.65,firstSeen))*fade;
+      set('map-object-'+index,'opacity',detected);
+      set('object-marker-'+index,'opacity',detected);
+      set('merged-object-'+index,'opacity',between(t,.86+index*.02,.92+index*.01)*fade);
+    });
+    for(const cell of cells){
+      const seen=mapRun.robots[cell.robot].discoveredAt[cell.index];
+      const observed=seen<0?0:seen===0?1:between(stepPositions[cell.robot],seen-.65,seen);
+      const merged=between(t,.83+cell.robot*.02,.92+cell.robot*.01);
+      const reveal=cell.local?observed:observed*between(merged,cell.index/95*.85,Math.min(.99,cell.index/95*.85+.12));
+      const opacity=Math.round((.04+.96*reveal*fade)*40)/40;
       if(opacity!==cell.last){cell.element.setAttribute('opacity',opacity);cell.last=opacity;}
     }
-    const packet=between(t,.63,.81);
+    const packet=between(t,.82,.94);
     follow('shared-map-packet','shared-map-merge',packet,0,false);
     set('shared-map-packet','opacity',between(packet,0,.1)*(1-between(packet,.9,1))*fade);
-    stage('mapping', t < .27 ? '01 / Explore regions of the same environment' : t < .64 ? '02 / Identify objects and mark their locations' : t < .83 ? '03 / Share and merge observations' : '04 / Complete map · geometry + object labels');
+    stage('mapping',t<.38?'01 / Randomized exploration of unknown regions':t<.83?'02 / Sense, identify objects, update the map':t<.95?'03 / Merge the robots’ observations':'04 / Shared map with discovered objects');
   }
   function road(seconds) {
     const t = (seconds % 12) / 12;
@@ -121,7 +123,7 @@ window.portfolioScenes = (() => {
   }
   const renderers = {reflex, mapping, incident, road};
   // Complete explanatory stills are present when motion is disabled or JS is unavailable.
-  reflex(6.1); mapping(14.5); incident(10.8); road(9.7);
+  reflex(6.1); mapping(30.5); incident(10.8); road(9.7);
   return {
     activate(scene, seconds) {
       const key = keys.find(key => elements[key] === scene);
@@ -130,7 +132,8 @@ window.portfolioScenes = (() => {
     draw(seconds, visible) {
       for (const key of keys) if (visible.has(elements[key])) renderers[key](Math.max(0, seconds - origins.get(key)));
     },
-    restart(key, seconds) { if (renderers[key]) { origins.set(key, seconds); renderers[key](0); } },
-    preview(key, seconds) { if (renderers[key]) renderers[key](seconds); }
+    restart(key, seconds) { if (renderers[key]) { origins.set(key, seconds); if(key==='mapping'){mapCycle=0;newMapRun();} renderers[key](0); } },
+    preview(key, seconds) { if (renderers[key]) renderers[key](seconds); },
+    mappingInfo(){return {seed:mapRun.seed,coverage:mapRun.robots.map(robot=>robot.coverage),signatures:mapRun.robots.map(robot=>robot.signature),frames:mapRun.robots.map(robot=>robot.frames)};}
   };
 })();

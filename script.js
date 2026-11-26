@@ -78,6 +78,9 @@ const motionButton = document.querySelector('#motion-toggle');
 const scenes = [...document.querySelectorAll('.robot-scene, .project-art svg')];
 const visibleScenes = new Set(scenes);
 let paused = reducedMotion.matches;
+let isScrolling=false;
+let scrollIdleTimer=null;
+const frameInterval=(matchMedia('(pointer:coarse)').matches||(navigator.hardwareConcurrency||8)<=4||navigator.connection?.saveData)?32.8:16.1;
 let elapsed = 0;
 let lastFrame = null;
 let frameRequest = null;
@@ -154,16 +157,16 @@ function draw(seconds) {
 }
 function animate(timestamp) {
   frameRequest = null;
-  if (paused || document.hidden || !visibleScenes.size) { lastFrame = null; return; }
-  // Cap SVG drawing to about 30 fps; native scrolling and UI transitions remain smooth.
-  if (lastFrame !== null && timestamp-lastFrame < 32.8) { frameRequest=requestAnimationFrame(animate); return; }
+  if (paused || isScrolling || document.hidden || !visibleScenes.size) { lastFrame = null; return; }
+  // Use the display cadence on desktop and a lower budget on touch/low-power devices.
+  if (lastFrame !== null && timestamp-lastFrame < frameInterval) { frameRequest=requestAnimationFrame(animate); return; }
   if (lastFrame !== null) elapsed += Math.min(timestamp - lastFrame, 100) / 1000;
   lastFrame = timestamp;
   draw(elapsed);
   frameRequest = requestAnimationFrame(animate);
 }
 function startMotion() {
-  if (!paused && !document.hidden && visibleScenes.size && frameRequest === null) frameRequest = requestAnimationFrame(animate);
+  if (!paused && !isScrolling && !document.hidden && visibleScenes.size && frameRequest === null) frameRequest = requestAnimationFrame(animate);
 }
 function syncMotion() {
   document.documentElement.classList.toggle('motion-paused', paused);
@@ -241,9 +244,9 @@ if ('IntersectionObserver' in window) {
   const revealObserver = new IntersectionObserver(entries => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
-      if (!reducedMotion.matches && !paused) entry.target.animate(
-        [{opacity:.15, transform:'translateY(28px) scale(.985)'},{opacity:1, transform:'translateY(0) scale(1)'}],
-        {duration:650, delay:Number(entry.target.dataset.revealDelay||0), easing:'cubic-bezier(.16,1,.3,1)'}
+      if (!reducedMotion.matches && !paused && !isScrolling) entry.target.animate(
+        [{opacity:.35, transform:'translateY(14px)'},{opacity:1, transform:'translateY(0)'}],
+        {duration:420, delay:Number(entry.target.dataset.revealDelay||0), easing:'cubic-bezier(.16,1,.3,1)'}
       );
       revealObserver.unobserve(entry.target);
     }
@@ -251,7 +254,7 @@ if ('IntersectionObserver' in window) {
   document.querySelectorAll('.contribution-grid,.project-grid,.credential-grid,.skill-categories').forEach(group=>{
     [...group.children].forEach((element,index)=>{element.dataset.revealDelay=String((index%3)*70);});
   });
-  document.querySelectorAll('.section-heading,.research-overview,.research-feature-metrics>div,.contribution-grid article,.project-card,.timeline article,.about-grid,.credential-grid article,.skill-categories article').forEach(element => revealObserver.observe(element));
+  document.querySelectorAll('.section-heading,.research-overview,.contribution-grid article,.project-body,.timeline article,.about-copy,.skill-categories article').forEach(element => revealObserver.observe(element));
 }
 document.querySelectorAll('details').forEach(detail => detail.addEventListener('toggle', () => {
   const content = detail.querySelector('.project-detail,.research-details');
@@ -306,24 +309,43 @@ const sectionNames={home:'Introduction',research:'Research',experience:'Experien
 const scrollSections=[...document.querySelectorAll('main>section[id]')];
 let scrollScheduled=false;
 let sectionOffsets=[];
-function measureSections(){sectionOffsets=scrollSections.map(element=>({element,id:element.id,top:element.getBoundingClientRect().top+window.scrollY}));}
+let scrollRange=1;
+let activeSectionId='';
+let previousScrollPosition=window.scrollY;
+let previousScrollTime=performance.now();
+const navigationLinks=[...document.querySelectorAll('.site-header nav a')];
+function measureSections(){sectionOffsets=scrollSections.map(element=>({element,id:element.id,top:element.getBoundingClientRect().top+window.scrollY}));scrollRange=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);}
 function updateScroll(){
   scrollScheduled=false;
   const scrollTop=window.scrollY;
-  const range=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
-  progressFill.style.transform=`scaleX(${Math.max(0,Math.min(1,scrollTop/range))})`;
+  progressFill.style.transform=`scaleX(${Math.max(0,Math.min(1,scrollTop/scrollRange))})`;
   let active=sectionOffsets[0];
   for(const section of sectionOffsets)if(section.top<=scrollTop+window.innerHeight*.32)active=section;
-  if(active){
+  if(active&&active.id!==activeSectionId){
+    activeSectionId=active.id;
     const label=sectionNames[active.id]||active.id;
     if(sectionContext.textContent!==label)sectionContext.textContent=label;
-    document.querySelectorAll('.site-header nav a').forEach(link=>{
+    navigationLinks.forEach(link=>{
       if(link.hash===`#${active.id}`)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
     });
   }
 }
 function scheduleScroll(){if(!scrollScheduled){scrollScheduled=true;requestAnimationFrame(updateScroll);}}
-window.addEventListener('scroll',scheduleScroll,{passive:true});
+window.addEventListener('scroll',()=>{
+  const now=performance.now(),distance=Math.abs(window.scrollY-previousScrollPosition);
+  const fast=distance>40||distance/Math.max(1,now-previousScrollTime)>1;
+  previousScrollPosition=window.scrollY;previousScrollTime=now;
+  if(fast||isScrolling){
+    if(!isScrolling){isScrolling=true;lastFrame=null;document.documentElement.classList.add('is-scrolling');if(frameRequest!==null){cancelAnimationFrame(frameRequest);frameRequest=null;}}
+    clearTimeout(scrollIdleTimer);
+    scrollIdleTimer=setTimeout(()=>{isScrolling=false;lastFrame=null;document.documentElement.classList.remove('is-scrolling');startMotion();},140);
+  }
+  scheduleScroll();
+},{passive:true});
 window.addEventListener('resize',()=>{measureSections();scheduleScroll();},{passive:true});
 if('ResizeObserver'in window)new ResizeObserver(()=>{measureSections();scheduleScroll();}).observe(document.querySelector('main'));
 measureSections();updateScroll();
+
+const compactHero=matchMedia('(max-width:600px)');
+function sizeHero(){document.querySelector('.robot-scene').setAttribute('viewBox',compactHero.matches?'240 0 720 540':'0 0 1200 540');}
+compactHero.addEventListener('change',sizeHero);sizeHero();

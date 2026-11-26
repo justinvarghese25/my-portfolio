@@ -15,4 +15,6 @@ jobs:
           node-version: '22'
       - run: node --check script.js
       - run: node --check scenes.js
+      - run: node --check exploration.js
+      - run: node scripts/check-exploration.mjs
       - run: node scripts/build.mjs
