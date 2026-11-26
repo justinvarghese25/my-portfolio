@@ -14,4 +14,5 @@ jobs:
         with:
           node-version: '22'
       - run: node --check script.js
+      - run: node --check scenes.js
       - run: node scripts/build.mjs

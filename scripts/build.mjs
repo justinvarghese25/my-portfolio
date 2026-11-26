@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = resolve(root, '_site');
-const publicFiles = ['index.html', 'styles.css', 'script.js', '.nojekyll', 'robots.txt', 'sitemap.xml', 'assets/favicon.svg', 'assets/social-card.png', 'docs/assets/justin.webp'];
+const publicFiles = ['index.html', 'styles.css', 'script.js', 'scenes.js', '.nojekyll', 'robots.txt', 'sitemap.xml', 'assets/favicon.svg', 'assets/social-card.png', 'docs/assets/justin.webp'];
 const allowedMedia = new Set(['assets/favicon.svg', 'assets/social-card.png', 'docs/assets/justin.webp', 'docs/assets/pic.jpg']);
 
 async function audit(directory, prefix = '') {

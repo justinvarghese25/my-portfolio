@@ -12,6 +12,12 @@ if (filterGroup) {
     projectCards.forEach((card) => { card.hidden = button.dataset.filter !== 'all' && card.dataset.category !== button.dataset.filter; });
     const count = projectCards.filter((card) => !card.hidden).length;
     filterStatus.textContent = `${count} projects shown. Filter: ${button.textContent}.`;
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !document.documentElement.classList.contains('motion-paused')) {
+      projectCards.filter(card => !card.hidden).forEach((card, index) => card.animate(
+        [{opacity: .35, transform: 'translateY(10px)'}, {opacity: 1, transform: 'translateY(0)'}],
+        {duration: 280, delay: index * 35, easing: 'cubic-bezier(.2,.7,.2,1)'}
+      ));
+    }
   });
 }
 const copyButton = document.querySelector('#copy-email');
@@ -119,12 +125,13 @@ const routes = [...document.querySelectorAll('.route-traveler')].map((element) =
 });
 const maze = document.querySelector('#maze-route');
 const mazeLength = maze.getTotalLength();
+const loopOffsets = {maze:0, surveillance:0};
 document.querySelector('#maze-progress').setAttribute('stroke-dasharray', `${mazeLength} ${mazeLength}`);
 function draw(seconds) {
-  if (visibleScenes.has(document.querySelector('.robot-scene'))) positionHero(seconds);
+  if (visibleScenes.has(document.querySelector('.robot-scene'))) positionHero(document.querySelector('.hero-visual').dataset.heroMode === 'plan' ? seconds : 0);
   for (const {element,path,length,scene,phase} of routes) {
     if (!visibleScenes.has(scene)) continue;
-    const t = ((seconds / 15) + phase) % 1;
+    const t = ((Math.max(0, seconds-loopOffsets.surveillance) / 15) + phase) % 1;
     const position = .5 - .5 * Math.cos(t * Math.PI * 2);
     const point = path.getPointAtLength(position * length);
     const next = path.getPointAtLength(Math.min(length, position * length + .5));
@@ -132,7 +139,7 @@ function draw(seconds) {
     element.setAttribute('transform', `translate(${point.x} ${point.y}) rotate(${angle})`);
   }
   if (visibleScenes.has(maze.closest('svg'))) {
-    const p = .5 - .5 * Math.cos(seconds / 18 * Math.PI * 2);
+    const p = .5 - .5 * Math.cos(Math.max(0,seconds-loopOffsets.maze) / 18 * Math.PI * 2);
     const point = maze.getPointAtLength(p * mazeLength);
     const [x,y] = elbowFor(454,226,point.x,point.y,165,180,1);
     const d = `M454 226L${x} ${y}L${point.x} ${point.y}`;
@@ -142,6 +149,7 @@ function draw(seconds) {
     document.querySelector('#maze-pen').setAttribute('transform',`translate(${point.x} ${point.y})`);
     document.querySelector('#maze-progress').setAttribute('stroke-dashoffset',mazeLength * (1 - p));
   }
+  if (!paused || seconds > 0) window.portfolioScenes.draw(seconds, visibleScenes);
 }
 function animate(timestamp) {
   frameRequest = null;
@@ -169,7 +177,8 @@ document.addEventListener('visibilitychange', () => { lastFrame = null; startMot
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (entry.isIntersecting) visibleScenes.add(entry.target); else visibleScenes.delete(entry.target);
+      if (entry.isIntersecting) { visibleScenes.add(entry.target); window.portfolioScenes.activate(entry.target, elapsed); }
+      else visibleScenes.delete(entry.target);
       entry.target.classList.toggle('scene-offscreen', !entry.isIntersecting);
     }
     startMotion();
@@ -178,3 +187,69 @@ if ('IntersectionObserver' in window) {
 }
 draw(0);
 syncMotion();
+
+document.querySelectorAll('[data-replay]').forEach(button => {
+  button.hidden = false;
+  button.addEventListener('click', () => {
+    if (button.dataset.replay in loopOffsets) { loopOffsets[button.dataset.replay] = elapsed; draw(elapsed); }
+    else window.portfolioScenes.restart(button.dataset.replay, elapsed);
+  });
+});
+
+const heroModes = document.querySelector('.hero-modes');
+const heroCaptions = {
+  observe: 'Observe — compare relative configurations across demonstrations.',
+  learn: 'Learn — group recurring configurations into relational regions.',
+  plan: 'Plan & act — use learned models to guide robot actions.'
+};
+heroModes.hidden = false;
+heroModes.addEventListener('click', event => {
+  const button = event.target.closest('button[data-hero-mode]');
+  if (!button) return;
+  document.querySelector('.hero-visual').dataset.heroMode = button.dataset.heroMode;
+  heroModes.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  document.querySelector('#hero-mode-caption').textContent = heroCaptions[button.dataset.heroMode];
+  positionHero(button.dataset.heroMode === 'plan' ? elapsed : 0);
+});
+
+// Requests stay on the site and use the existing contact form rather than an email-app dependency.
+document.querySelectorAll('[data-contact-topic]').forEach(link => {
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    const topic = link.dataset.contactTopic;
+    contactForm.querySelector('[name="topic"]').value = topic;
+    const message = contactForm.querySelector('[name="message"]');
+    if (!message.value.trim() || message.dataset.requestTemplate === message.value) {
+      message.value = topic === 'Résumé request'
+        ? 'Hi Justin, I would like to request your résumé.\n\n'
+        : 'Hi Justin, I would like to ask about the following certificate or training:\n\n';
+      message.dataset.requestTemplate = message.value;
+    }
+    document.querySelector('#form-status').textContent = 'Add your name and email, complete your message, then press Send message.';
+    document.querySelector('#form-status').removeAttribute('data-state');
+    contactForm.scrollIntoView({behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start'});
+    contactForm.querySelector('[name="name"]').focus({preventScroll:true});
+  });
+});
+
+// Brief, one-time entrance transitions. Content is never hidden before JavaScript loads.
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      if (!reducedMotion.matches && !paused) entry.target.animate(
+        [{opacity:.25, transform:'translateY(16px)'},{opacity:1, transform:'translateY(0)'}],
+        {duration:480, easing:'cubic-bezier(.2,.7,.2,1)'}
+      );
+      revealObserver.unobserve(entry.target);
+    }
+  }, {threshold:.12});
+  document.querySelectorAll('.section-heading,.research-overview,.contribution-grid article,.project-card,.timeline article,.about-grid,.credential-grid article').forEach(element => revealObserver.observe(element));
+}
+document.querySelectorAll('details').forEach(detail => detail.addEventListener('toggle', () => {
+  const content = detail.querySelector('.project-detail,.research-details');
+  if (detail.open && content && !reducedMotion.matches && !paused) content.animate(
+    [{opacity:0, transform:'translateY(-5px)'},{opacity:1, transform:'translateY(0)'}],
+    {duration:220,easing:'ease-out'}
+  );
+}));
