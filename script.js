@@ -376,5 +376,8 @@ const compactHero=matchMedia('(max-width:600px)');
 function sizeHero(){document.querySelector('.robot-scene').setAttribute('viewBox','0 0 640 510');}
 compactHero.addEventListener('change',sizeHero);sizeHero();
 
-// Keep the opening work previews connected to their full project stories.
-document.querySelectorAll('[data-featured-project]').forEach(link=>link.addEventListener('click',event=>{const card=[...document.querySelectorAll('.project-card')].find(card=>card.querySelector('h3').textContent===link.dataset.featuredProject);const trigger=card?.querySelector('.project-trigger');if(trigger){event.preventDefault();trigger.click();caseTrigger=link;}}));
+// Home previews use their section anchors; reveal a filtered-out destination first.
+document.querySelectorAll('[data-featured-project]').forEach(link=>link.addEventListener('click',()=>{
+ const target=document.querySelector(link.hash);
+ if(target?.hidden)filterGroup?.querySelector('[data-filter="all"]')?.click();
+}));
