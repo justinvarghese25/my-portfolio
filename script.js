@@ -12,6 +12,7 @@ if (filterGroup) {
     projectCards.forEach((card) => { card.hidden = button.dataset.filter !== 'all' && card.dataset.category !== button.dataset.filter; });
     const count = projectCards.filter((card) => !card.hidden).length;
     filterStatus.textContent = `${count} projects shown. Filter: ${button.textContent}.`;
+    requestAnimationFrame(()=>measureSections());
     if (!document.documentElement.classList.contains('motion-paused')) {
       projectCards.filter(card => !card.hidden).forEach((card, index) => card.animate(
         [{opacity: .35, transform: 'translateY(10px)'}, {opacity: 1, transform: 'translateY(0)'}],
@@ -81,6 +82,7 @@ let storedMotion='';try{storedMotion=localStorage.getItem('portfolio-motion')||'
 let motionOptIn=storedMotion==='full';
 let paused=storedMotion==='reduced'||(!motionOptIn&&reducedMotion.matches);
 const scrollMotions=new Map();
+let refreshScrollTransitions=()=>{},updateScrollTransitions=()=>{};
 let isScrolling=false;
 let scrollIdleTimer=null;
 const frameInterval=(matchMedia('(pointer:coarse)').matches||(navigator.hardwareConcurrency||8)<=4||navigator.connection?.saveData)?32.8:16.1;
@@ -96,38 +98,6 @@ function elbowFor(sx, sy, x, y, a, b, bend = -1) {
   const angle = Math.atan2(dy, dx) + bend * Math.acos(Math.max(-1, Math.min(1, (distance * distance + a * a - b * b) / (2 * distance * a))));
   return [sx + a * Math.cos(angle), sy + a * Math.sin(angle)];
 }
-function positionHero(seconds,override=null) {
-  const cycle = (seconds / 17) % 1;
-  const returning = cycle >= .5;
-  const t = (cycle * 2) % 1;
-  const source = returning ? [460, 306] : [390, 283];
-  const destination = returning ? [390, 283] : [460, 306];
-  const frames = [[0,330,172,0],[.1,330,172,0],[.22,source[0],source[1]-90,0],
-    [.32,source[0],source[1]-28,0],[.39,source[0],source[1]-28,1],
-    [.48,source[0],source[1]-90,1],[.63,destination[0],destination[1]-90,1],
-    [.73,destination[0],destination[1]-28,1],[.8,destination[0],destination[1]-28,0],
-    [.89,destination[0],destination[1]-90,0],[1,330,172,0]];
-  const index = Math.max(0, frames.findIndex((f) => f[0] > t) - 1);
-  const from = frames[index], to = frames[index + 1];
-  const p = ease((t - from[0]) / (to[0] - from[0]));
-  const x = override?.x ?? from[1] + (to[1] - from[1]) * p;
-  const y = override?.y ?? from[2] + (to[2] - from[2]) * p;
-  const grip = override?.grip ?? from[3] + (to[3] - from[3]) * p;
-  const [ex, ey] = elbowFor(178, 280, x, y, 140, 150);
-  const d = `M178 280L${ex} ${ey}L${x} ${y}`;
-  document.querySelectorAll('.arm-back,.arm-metal,.arm-inset').forEach((path) => path.setAttribute('d', d));
-  document.querySelector('#elbow-joint').setAttribute('transform', `translate(${ex} ${ey})`);
-  document.querySelector('#wrist').setAttribute('transform', `translate(${x} ${y})`);
-  document.querySelector('#jaw-left').setAttribute('transform', `translate(${grip * 5} 0)`);
-  document.querySelector('#jaw-right').setAttribute('transform', `translate(${-grip * 5} 0)`);
-  const object = override ? [390,283] : t < .36 ? source : t < .765 ? [x, y + 28] : destination;
-  document.querySelector('#carried-object').setAttribute('transform', `translate(${object[0]} ${object[1]})`);
-  document.querySelector('#research-relation-badge').setAttribute('transform',`translate(${object[0]-32} ${object[1]+24})`);
-  const stage = t < .32 ? 'REACH' : t < .48 ? 'GRASP + LIFT' : t < .73 ? 'TRANSFER' : 'PLACE + RELEASE';
-  const mode=document.querySelector('.hero-visual').dataset.heroMode;
-  document.querySelector('#robot-stage').textContent = mode==='observe'?'OBSERVE DEMONSTRATIONS':mode==='learn'?'LEARN RECURRING RELATIONSHIPS':`${returning ? 'RETURN' : 'TRANSFER'} / ${stage}`;
-}
-
 const routes = [...document.querySelectorAll('.route-traveler')].map((element) => {
   const path = document.getElementById(element.dataset.route);
   return { element, path, length: path.getTotalLength(), scene: element.closest('svg'), phase: Number(element.dataset.phase || 0) };
@@ -138,7 +108,6 @@ const loopOffsets = {maze:0, surveillance:0};
 document.querySelector('#maze-progress').setAttribute('stroke-dasharray', `${mazeLength} ${mazeLength}`);
 function draw(seconds) {
   window.portfolioStory.draw(seconds,visibleScenes);
-  if(visibleScenes.has(document.querySelector('.robot-scene'))){const state=window.portfolioStory.robotState();positionHero(state.time,state.override);}
   for (const {element,path,length,scene,phase} of routes) {
     if (!visibleScenes.has(scene)) continue;
     const t = ((Math.max(0, seconds-loopOffsets.surveillance) / 15) + phase) % 1;
@@ -179,7 +148,7 @@ function syncMotion() {
   document.documentElement.classList.toggle('allow-motion',motionOptIn&&!paused);
   const introToggle=document.querySelector('#intro-motion-toggle');introToggle.hidden=false;introToggle.textContent=paused?'Play animations':'Pause animations';introToggle.setAttribute('aria-pressed',String(paused));
   document.querySelector('#motion-state-note').textContent=paused?(storedMotion!=='reduced'&&reducedMotion.matches&&!motionOptIn?'Your device requests reduced motion. Play to enable animations.':'Animations paused. Play to enable scene and scroll motion.'):'Automatic animation · pause anytime';
-  if(paused)for(const animation of scrollMotions.values())animation.finish();
+  updateScrollTransitions();
   motionButton.setAttribute('aria-pressed', String(paused));
   motionButton.innerHTML = paused ? '<span aria-hidden="true">▷</span> Play motion' : '<span aria-hidden="true">Ⅱ</span> Pause motion';
   if (paused && frameRequest !== null) { cancelAnimationFrame(frameRequest); frameRequest = null; }
@@ -215,7 +184,7 @@ document.querySelectorAll('[data-replay]').forEach(button => {
   });
 });
 
-const restartStory=document.querySelector('#restart-research-story');restartStory.hidden=false;restartStory.addEventListener('click',()=>{window.portfolioStory.restart(elapsed);const state=window.portfolioStory.robotState();positionHero(state.time,state.override);});
+const restartStory=document.querySelector('#restart-research-story');restartStory.hidden=false;restartStory.addEventListener('click',()=>{window.portfolioStory.restart(elapsed);});
 
 // Requests stay on the site and use the existing contact form rather than an email-app dependency.
 document.querySelectorAll('[data-contact-topic]').forEach(link => {
@@ -237,17 +206,69 @@ document.querySelectorAll('[data-contact-topic]').forEach(link => {
   });
 });
 
-// Cross-browser scroll entrances use one observer, with fully readable static fallbacks.
-if('IntersectionObserver'in window){
- const observer=new IntersectionObserver(entries=>{
-  for(const entry of entries){
-   const previous=scrollMotions.get(entry.target);if(previous){previous.cancel();scrollMotions.delete(entry.target);}
-   if(!entry.isIntersecting||paused||!entry.target.animate)continue;
-   const animation=entry.target.animate([{opacity:.12,transform:'translateY(34px)'},{opacity:1,transform:'translateY(0)'}],{duration:650,easing:'cubic-bezier(.16,1,.3,1)'});
-   scrollMotions.set(entry.target,animation);animation.onfinish=()=>{if(scrollMotions.get(entry.target)===animation)scrollMotions.delete(entry.target);};
-  }
- },{threshold:.12});
- document.querySelectorAll('.section-heading,.research-overview,.research-feature-metrics,.contribution-grid article,.research-player-heading,.project-body>h3,.project-body>p:not(.eyebrow),.timeline article,.about-story,.skill-categories article').forEach(element=>{element.classList.add('scroll-reveal');observer.observe(element);});
+// Viewport entry starts a complete, time-based reveal. Two observers separate
+// the entrance threshold from a distant offscreen reset, avoiding flicker at edges.
+if('IntersectionObserver'in window&&Element.prototype.animate){
+ const headingSelector='#research-title,#experience-title,#work-title,#about-title,#skills-title,#credentials-title,#contact-title';
+ document.querySelectorAll(headingSelector).forEach(heading=>{
+  const nodes=[...heading.childNodes];let line;
+  const addLine=()=>{const mask=document.createElement('span');mask.className='heading-line';line=document.createElement('span');line.className='heading-ink';mask.append(line);heading.append(mask);};
+  heading.replaceChildren();addLine();
+  for(const node of nodes){if(node.nodeName==='BR'){heading.append(document.createTextNode(' '));addLine();}else line.append(node);}
+ });
+ const selector=headingSelector+',.section-heading,.research-overview>div:nth-child(2),.research-feature-metrics>div,.contribution-grid article,.research-cinema,.research-player-heading,.research-stage,.research-narrative,.project-card,.project-art>svg,.project-body>h3,.project-body>p:not(.eyebrow),.timeline article,.about-story,.skill-categories article,.credential-grid article';
+ const cards=[...document.querySelectorAll('.project-card')];
+ const states=[...document.querySelectorAll(selector)].map(element=>{
+  const headline=element.matches(headingSelector),art=element.matches('.project-art>svg,.research-stage'),surface=element.matches('.project-card,.research-cinema'),metric=element.matches('.research-feature-metrics>div');
+  const parts=headline?[...element.querySelectorAll('.heading-ink')]:[element],anchor=element.matches('.project-art>svg')?element.parentElement:element;
+  const card=element.closest('.project-card'),siblings=[...element.parentElement.children].filter(e=>e.matches(selector));
+  const stagger=card?Math.max(0,cards.indexOf(card))%2:Math.max(0,siblings.indexOf(element))%3;
+  parts.forEach(part=>part.classList.add('scroll-reveal'));
+  return{element,anchor,parts,headline,art,surface,metric,stagger,started:false,visible:false,animations:[]};
+ });
+ const anchors=new Map();for(const state of states){if(!anchors.has(state.anchor))anchors.set(state.anchor,[]);anchors.get(state.anchor).push(state);}
+ function clear(state){for(const animation of state.animations)animation.cancel();state.animations=[];state.parts.forEach(part=>scrollMotions.delete(part));}
+ function finish(state){clear(state);state.started=true;state.parts.forEach(part=>part.classList.remove('is-reveal-pending'));state.element.classList.add('has-revealed');}
+ function prepare(state){clear(state);state.started=false;state.element.classList.remove('has-revealed');state.parts.forEach(part=>part.classList.add('is-reveal-pending'));}
+ function reveal(state){
+  if(state.started||paused)return;
+  clear(state);state.started=true;state.element.classList.add('has-revealed');
+  const compact=window.innerWidth<700,delay=compact?0:state.stagger*110;
+  state.parts.forEach((part,index)=>{
+   part.classList.remove('is-reveal-pending');
+   const lift=state.art?(compact?46:76):state.metric?50:(compact?34:54);
+   let frames,duration;
+   if(state.headline){frames=[{opacity:0,transform:'translate3d(0,112%,0)'},{opacity:1,transform:'translate3d(0,0,0)'}];duration=1050;}
+   else if(state.surface){frames=[{opacity:0},{opacity:1}];duration=650;}
+   else if(state.art){frames=[{opacity:0,transform:`translate3d(0,${lift}px,0) scale(.9)`},{opacity:1,transform:'translate3d(0,0,0) scale(1)'}];duration=1150;}
+   else if(state.metric){frames=[{opacity:0,transform:'translate3d(0,50px,0) scale(.93)'},{opacity:1,transform:'translate3d(0,0,0) scale(1)'}];duration=1000;}
+   else{frames=[{opacity:0,transform:`translate3d(0,${lift}px,0)`},{opacity:1,transform:'translate3d(0,0,0)'}];duration=900;}
+   const animation=part.animate(frames,{duration,delay:delay+(state.headline?index*110:0),easing:'cubic-bezier(.22,1,.36,1)',fill:'backwards'});
+   state.animations.push(animation);scrollMotions.set(part,animation);
+   animation.onfinish=()=>{animation.cancel();scrollMotions.delete(part);state.animations=state.animations.filter(item=>item!==animation);};
+  });
+ }
+ // Visible content starts readable. Pending styles are applied only by successful JS.
+ for(const state of states){const rect=state.anchor.getBoundingClientRect();if(paused||(rect.top<innerHeight-48&&rect.bottom>0))finish(state);else prepare(state);}
+ const enterObserver=new IntersectionObserver(entries=>{
+  for(const entry of entries)for(const state of anchors.get(entry.target)||[]){state.visible=entry.isIntersecting;if(entry.isIntersecting){if(paused)finish(state);else reveal(state);}}
+ },{rootMargin:'0px 0px -48px 0px',threshold:0});
+ const resetObserver=new IntersectionObserver(entries=>{
+  for(const entry of entries){if(entry.isIntersecting)continue;for(const state of anchors.get(entry.target)||[]){if(paused)finish(state);else prepare(state);}}
+ },{rootMargin:'180px 0px',threshold:0});
+ for(const anchor of anchors.keys()){enterObserver.observe(anchor);resetObserver.observe(anchor);}
+ let wasPaused=paused;
+ updateScrollTransitions=()=>{
+  if(paused===wasPaused)return;wasPaused=paused;
+  for(const state of states){if(paused)finish(state);else if(state.visible){prepare(state);reveal(state);}else prepare(state);}
+ };
+ // Layout changes and filter switches are handled by the observers themselves.
+ refreshScrollTransitions=()=>{};
+ document.addEventListener('focusin',()=>{
+  const focused=document.activeElement;
+  for(const state of states)if(state.element.contains(focused)||(state.element.closest('.project-card')?.contains(focused)))finish(state);
+ });
+ window.addEventListener('pageshow',()=>{if(document.visibilityState==='visible')for(const state of states)if(state.visible&&!state.started)reveal(state);});
 }
 
 // Native disclosures remain a no-JavaScript fallback; enhanced controls open a focused case study.
@@ -302,7 +323,7 @@ document.addEventListener('click',event=>{
   wave.style.left=`${(pointer?event.clientX-bounds.left:bounds.width/2)-10}px`;
   wave.style.top=`${(pointer?event.clientY-bounds.top:bounds.height/2)-10}px`;
   control.append(wave);
-  const animation=wave.animate([{transform:'scale(0)',opacity:.2},{transform:`scale(${Math.max(bounds.width,bounds.height)/9})`,opacity:0}],{duration:450,easing:'ease-out'});
+  const animation=wave.animate([{transform:'scale(0)',opacity:.2},{transform:`scale(${Math.min(48,bounds.width,bounds.height)/20})`,opacity:0}],{duration:280,easing:'ease-out'});
   animation.onfinish=()=>wave.remove();animation.oncancel=()=>wave.remove();
 });
 
@@ -318,10 +339,11 @@ let activeSectionId='';
 let previousScrollPosition=window.scrollY;
 let previousScrollTime=performance.now();
 const navigationLinks=[...document.querySelectorAll('.site-header nav a')];
-function measureSections(){sectionOffsets=scrollSections.map(element=>({element,id:element.id,top:element.getBoundingClientRect().top+window.scrollY}));scrollRange=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);}
+function measureSections(){sectionOffsets=scrollSections.map(element=>({element,id:element.id,top:element.getBoundingClientRect().top+window.scrollY}));scrollRange=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);refreshScrollTransitions();}
 function updateScroll(){
   scrollScheduled=false;
   const scrollTop=window.scrollY;
+  updateScrollTransitions();
   progressFill.style.transform=`scaleX(${Math.max(0,Math.min(1,scrollTop/scrollRange))})`;
   let active=sectionOffsets[0];
   for(const section of sectionOffsets)if(section.top<=scrollTop+window.innerHeight*.32)active=section;
@@ -351,5 +373,8 @@ if('ResizeObserver'in window)new ResizeObserver(()=>{measureSections();scheduleS
 measureSections();updateScroll();
 
 const compactHero=matchMedia('(max-width:600px)');
-function sizeHero(){document.querySelector('.robot-scene').setAttribute('viewBox','240 0 720 540');document.querySelector('#intro-scene').setAttribute('viewBox',compactHero.matches?'80 35 840 330':'0 0 1000 400');}
+function sizeHero(){document.querySelector('.robot-scene').setAttribute('viewBox','0 0 640 510');}
 compactHero.addEventListener('change',sizeHero);sizeHero();
+
+// Keep the opening work previews connected to their full project stories.
+document.querySelectorAll('[data-featured-project]').forEach(link=>link.addEventListener('click',event=>{const card=[...document.querySelectorAll('.project-card')].find(card=>card.querySelector('h3').textContent===link.dataset.featuredProject);const trigger=card?.querySelector('.project-trigger');if(trigger){event.preventDefault();trigger.click();caseTrigger=link;}}));
